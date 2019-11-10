@@ -1,0 +1,63 @@
+POS application
+
+UI: use html
+single page UI
+
+micro services
+Authenticate service: register users and authentication service
+looksup userid and password from static file.
+
+Inventory management services
+support debit and credit
+maintain items by item_id, name, supplier, quantity, threshold, increment (like 1, 10, etc), quantity_pending (orders taken if inventory quantity less than ordered quantity),
+ restock? (used for items that could be -restocked on returns)
+
+replenishment service:
+  run a scheduler to check inventory management data base and order for more items if below threshold.
+  log for each transactions.
+  makes a call to get items with threshold limits hit. (quantity - quantity_pending should be greater than threshold limit)
+  makes a put call to update item quantity above threshold.
+
+salesservice
+  records each item, quantity, price for each item and total cost for each item and quantity (line item on sales receipt)
+  records total sales
+  records receipt number
+  records cashier id and shift. (shift coulld be changed and hence part of the sales record)
+  Allow orders to be taken for quantity greater than inventory quantity (put it in the quantity_pending)
+
+reporting service
+  Inventory report endpoint
+  Cashier report endpoint - report x: sales record for cashier id, shift.
+  z report: all sales activity for given shift GETL /{cashier_id}/{shift}
+
+pricing service
+each item_id has a price.
+when all items are added to sales:
+  pricing service is called to calculate total.
+  system records cashier id and amount of sales
+  system records at reach register: register number, the user (cashier), the dates and times of sale, sale items, and the amount of sales.
+
+return service:
+  return item with quantity,
+  call pricing service for refund amount
+  call inventory service for adjusting inventory for qualified items.
+
+
+questions:
+sales records
+search Inventory - search by products, item_id
+Inventory: outstanding backroom inventory orders?
+Can orders be taken for quantity greater than inventory quantity?
+wrote algorithms before you start coding. --write our own list and queue?
+
+design:
+Json contract between rest end points.
+
+
+client:
+starts sale:
+  adds or removes items.
+rest end point:
+start sale (to maintain inventory on items marked for sale)
+  add item
+  remove item
