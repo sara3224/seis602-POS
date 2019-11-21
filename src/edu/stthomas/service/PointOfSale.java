@@ -35,6 +35,7 @@ public class PointOfSale {
     private double salesAmt;
     private Date salesTime;
     private List<SalesLineItem> salesLineItems;
+    private boolean refunded;
 
     public PointOfSale(Cashier cashier, Shift shift, Register register) {
         this.cashier = cashier;
@@ -92,5 +93,13 @@ public class PointOfSale {
 
     public Cashier getCashier() {
         return cashier;
+    }
+
+    public boolean isRefunded() {
+        return refunded;
+    }
+
+    public void setRefunded(boolean refunded) {
+        this.refunded = refunded;
     }
 }
