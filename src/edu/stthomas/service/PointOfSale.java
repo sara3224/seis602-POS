@@ -1,8 +1,9 @@
 package edu.stthomas.service;
 
+import edu.stthomas.enums.Shift;
 import edu.stthomas.model.Cashier;
 import edu.stthomas.model.Register;
-import edu.stthomas.enums.Shift;
+import edu.stthomas.model.SalesLineItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,12 +34,14 @@ public class PointOfSale {
     private static List<PointOfSale> sales = new ArrayList<>();
     private double salesAmt;
     private Date salesTime;
+    private List<SalesLineItem> salesLineItems;
 
     public PointOfSale(Cashier cashier, Shift shift, Register register) {
         this.cashier = cashier;
         this.shift = shift;
         this.register = register;
         salesId = UUID.randomUUID();
+        salesLineItems = new ArrayList<>();
     }
 
     /**
@@ -47,25 +50,24 @@ public class PointOfSale {
      * @param qty
      */
     public void addItem(Integer item_id, int qty) {
-        itemsAndQuantity.put(item_id, qty);
+        salesLineItems.add(new SalesLineItem(item_id, qty, pricingService.getPrice(item_id)));
     }
 
     public UUID getSalesId() {
         return salesId;
     }
 
-    public Map<Integer, Integer> getItemsAndQuantity() {
-        return itemsAndQuantity;
+    public List<SalesLineItem> getSalesLineItems() {
+        return salesLineItems;
     }
 
     public void removeItem(Integer item_id) {
         itemsAndQuantity.remove(item_id);
     }
-
     //call the pricing service to get cost of each item and calculate total
     public void finalizeSale() {
-        salesAmt = itemsAndQuantity.keySet().stream().mapToDouble(item_id -> pricingService.getPrice(item_id)* itemsAndQuantity
-                .get(item_id)).sum();
+        salesLineItems.forEach(salesLineItem -> salesAmt += salesLineItem.getLineItemAmt());
+
         salesTime = new Date();
         sales.add(this);
     }

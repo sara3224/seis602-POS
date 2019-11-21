@@ -3,10 +3,10 @@ package edu.stthomas;
 import edu.stthomas.enums.Shift;
 import edu.stthomas.model.Cashier;
 import edu.stthomas.model.Register;
+import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.service.PointOfSale;
 
 import java.util.List;
-import java.util.Map;
 
 public class Main {
     public static void main(String args[]) {
@@ -25,7 +25,7 @@ public class Main {
         pos.addItem(1, 1);
         pos.addItem(2, 4);
         pos.removeItem(1);
-        pos.addItem(3,5);
+        pos.addItem(3,3);
         pos.finalizeSale();
 
 
@@ -34,9 +34,10 @@ public class Main {
             System.out.println("cashier id: " +sale.getCashier().getId()+ " level: "+sale.getCashier().getLevel()+ " Register: "
                     +sale.getRegister().getRegisterId() + " sales amt: " + sale.getSalesAmt() + " sales time: " +sale.getSalesTime()
             +" sales id: "+sale.getSalesId());
-            Map<Integer, Integer> salesAndItems = sale.getItemsAndQuantity();
-                for(Integer item: salesAndItems.keySet()) {
-                    System.out.println("item id:"+item+" quantity:"+salesAndItems.get(item));
+
+            List<SalesLineItem> salesLineItems = sale.getSalesLineItems();
+                for(SalesLineItem lineItem: salesLineItems) {
+                    System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " amt: "+lineItem.getLineItemAmt());
                 }
                 System.out.println();
         }
