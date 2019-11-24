@@ -17,7 +17,7 @@ public class Main {
         pos.addItem(2, 2);
         pos.removeItem(2);
         pos.addItem(3,5);
-        pos.addItem(3,1);
+        pos.addItem(3,1);//correction in the sale quantity
         //2.	Once all items are added to the sale the cashier will request for cash to finalize the sale.
         pos.finalizeSale();
 
