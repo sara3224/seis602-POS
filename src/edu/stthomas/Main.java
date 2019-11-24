@@ -35,7 +35,7 @@ public class Main {
 
         //3.	The system will keep track of the amount of sales ($) at each register for each cashier
         salesDetails();
-        reportZ("2019-11-25");
+        reportZ(Shift.NIGHT, "2019-11-24");
         reportX(1001,Shift.DAY,"2019-11-24");
     }
 
@@ -88,13 +88,14 @@ public class Main {
      *
      * @param reportDate
      */
-    private static void reportZ(String reportDate) {
+    private static void reportZ(Shift shift, String reportDate) {
             Collection<SalesRecord> sales = SalesRepo.getSales();
             System.out.println("Sales report");
             sales = sales.stream()
                     .filter(salesRecord -> {
                         try {
-                            return isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), salesRecord);
+                            boolean shiftMatch = salesRecord.getShift().equals(shift);
+                            return isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), salesRecord) && shiftMatch;
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
