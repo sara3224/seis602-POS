@@ -6,8 +6,13 @@ import edu.stthomas.model.SalesRecord;
 import edu.stthomas.repo.SalesRepo;
 import edu.stthomas.service.PointOfSale;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -30,13 +35,20 @@ public class Main {
 
         //3.	The system will keep track of the amount of sales ($) at each register for each cashier
         salesDetails();
+        reportZ("2019-11-25");
+        reportX(1001,"2019-11-24");
     }
 
     private static void salesDetails() {
         Collection<SalesRecord> sales = SalesRepo.getSales();
         System.out.println("Sales report");
-        for(SalesRecord sale: sales) {
+        generateReport(sales);
 
+
+    }
+
+    private static void generateReport(Collection<SalesRecord> sales) {
+        for(SalesRecord sale: sales) {
             System.out.println("cashier id: " +sale.getCashier().getId()+ " shift: "+sale.getShift()+" level: "+sale.getCashier().getLevel()+ " Register: "
                     +sale.getRegister().getRegisterId() + " sales amt: " + sale.getTotalSalesAmt() + " sales tax: " +sale.getTotalTaxAmt()
                     +" total amt: " +sale.getTotalAmt()
@@ -51,5 +63,58 @@ public class Main {
                 }
                 System.out.println();
         }
+    }
+
+    /**
+     *
+     * @param reportDate
+     */
+    private static void reportX(int cashierId, String reportDate) {
+        Collection<SalesRecord> sales = SalesRepo.getSales();
+        System.out.println("Sales report");
+        sales = sales.stream()
+                .filter(salesRecord -> {
+                    try {
+                        boolean isSameCashier = salesRecord.getCashier().getId() == cashierId;
+                        return isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), salesRecord) && isSameCashier;
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }).collect(Collectors.toList());
+        generateReport(sales);
+    }
+
+    /**
+     *
+     * @param reportDate
+     */
+    private static void reportZ(String reportDate) {
+            Collection<SalesRecord> sales = SalesRepo.getSales();
+            System.out.println("Sales report");
+            sales = sales.stream()
+                    .filter(salesRecord -> {
+                        try {
+                            return isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), salesRecord);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    })
+                    .collect(
+                            Collectors.toList());
+        generateReport(sales);
+    }
+
+
+    private static boolean isSameDay(Date reportDate2, SalesRecord salesRecord) {
+        Calendar requestedDate = Calendar.getInstance();
+        requestedDate.setTime(reportDate2);
+
+        Calendar salesRecordCal = Calendar.getInstance();
+        salesRecordCal.setTime(salesRecord.getSalesTime());
+
+        return requestedDate.get(Calendar.DAY_OF_YEAR) == salesRecordCal.get(Calendar.DAY_OF_YEAR) &&
+                requestedDate.get(Calendar.YEAR) == salesRecordCal.get(Calendar.YEAR);
     }
 }
