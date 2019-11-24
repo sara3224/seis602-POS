@@ -23,6 +23,8 @@ public class Cashier {
         return id;
     }
 
+
+
     public int getLevel() {
         return cashierLevels.get(getId());
     }

@@ -7,9 +7,9 @@ public class PricingService {
     static Map<Integer, Double> pricing = new HashMap<>();
 
     static{
-        pricing.put(1, 2.2);
-        pricing.put(2, 120.0);
-        pricing.put(3, 500.0);
+        pricing.put(1, 2.20);
+        pricing.put(2, 120.00);
+        pricing.put(3, 500.00);
     }
 
     public void updateOraddPrice(Integer item_id, Double newPrice) {
@@ -23,5 +23,4 @@ public class PricingService {
     public double getPrice(Integer item_id) {
         return pricing.get(item_id);
     }
-
 }
