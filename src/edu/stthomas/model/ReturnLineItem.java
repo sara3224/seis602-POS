@@ -1,8 +1,6 @@
 package edu.stthomas.model;
 
 import edu.stthomas.helper.Helper;
-import edu.stthomas.service.PricingService;
-import edu.stthomas.service.TaxService;
 
 public class ReturnLineItem {
     private int itemId;
@@ -10,8 +8,6 @@ public class ReturnLineItem {
     private double price;
     private double tax;
     private String reason; //why item was returned
-    private static TaxService taxService = new TaxService();
-    private static PricingService pricingService = new PricingService();
 
     public ReturnLineItem(SalesLineItem salesLineItem, int qty, String reason) {
         this.itemId = salesLineItem.getItemId();
