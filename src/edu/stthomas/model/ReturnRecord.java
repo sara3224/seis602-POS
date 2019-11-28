@@ -17,9 +17,9 @@ public class ReturnRecord {
     private Cashier cashier;
     private Shift shift;
     private Register register;
-    private double totalRefundAmt;
-    private double totalTaxRefundAmt;
-    private Date refundTime;
+    private double totalAmtBeforeTax;
+    private double totalTaxAmt;
+    private Date transactionTime;
     private int id;
     private SalesRepo salesRepo;
     private SalesRecord salesRecord;
@@ -32,11 +32,10 @@ public class ReturnRecord {
         returnsRepo = new ReturnsRepo();
         this.salesId = saleId;
         salesRecord = salesRepo.getSalesRecord(salesId);
-//        this.salesLineItems = salesRecord.getSalesLineItems();
         this.cashier = new Cashier(cashierId);
         this.shift = shift;
         this.register = new Register(registerId);
-        refundTime = Date.from(ZonedDateTime.now().toInstant());
+        transactionTime = Date.from(ZonedDateTime.now().toInstant());
         this.reason = reason;
         this.salesId = saleId;
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
@@ -48,45 +47,10 @@ public class ReturnRecord {
         });
 
         for (ReturnLineItem returnLineItem: returnLineItems) {
-            totalRefundAmt += returnLineItem.getLineItemRefund();
-            totalTaxRefundAmt += returnLineItem.getLineItemTax();
+            totalAmtBeforeTax += returnLineItem.getLineItemRefund();
+            totalTaxAmt += returnLineItem.getLineItemTax();
         }
-//                (key, value) -> sal
-//        itemsAndQuantity.forEach((key,value)-> returnLineItems.add(new ReturnLineItem(key,value)));
-//        for (SalesLineItem salesLineItem : salesLineItems) {
-//            totalRefundAmt += salesLineItem.getLineItemSale();
-//            totalTaxAmt += salesLineItem.getLineItemTax();
-//        }
     }
-
-//    public ReturnRecord complete() {
-//        SalesRecord salesRecord = salesRepo.getSalesRecord(salesId);
-//        List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
-//        //create a refund line items
-//        List<ReturnLineItem> returnLineItems = new ArrayList<>();
-//
-//        for(SalesLineItem salesLineItem: salesLineItems) {
-//            ReturnLineItem refundLineItem = new ReturnLineItem(salesLineItem, reason);
-//            returnLineItems.add(refundLineItem);
-//        }
-//        returnsRepo.save(this);
-//    }
-
-
-//    public List<ReturnLineItem> refundAll(int salesId, String reason) {
-//        //get all items from sales and refund all
-//        SalesRecord salesRecord = salesRepo.getSalesRecord(salesId);
-//        List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
-//        //create a refund line items
-//        List<ReturnLineItem> returnLineItems = new ArrayList<>();
-//
-//        for(SalesLineItem salesLineItem: salesLineItems) {
-//            ReturnLineItem refundLineItem = new ReturnLineItem(salesLineItem, reason);
-//            returnLineItems.add(refundLineItem);
-//        }
-//        returnsRepo.save(this);
-//        return returnLineItems;
-//    }
 
     public int save(ReturnRecord returnsRecord) {
         id = returnsRepo.save(returnsRecord);
@@ -109,16 +73,15 @@ public class ReturnRecord {
      * get the total of sales from each line item (excludes tax amt)
      * @return
      */
-    public double getTotalRefundAmt() {
-        return Helper.roundUp(totalRefundAmt);
+    public double getTotalAmtBeforeTax() {
+        return Helper.roundUp(totalAmtBeforeTax);
     }
-//
     public double getTotalTaxAmt() {
-        return Helper.roundUp(totalTaxRefundAmt);
+        return Helper.roundUp(totalTaxAmt);
     }
 
     public double getTotalAmt() {
-        return Helper.roundUp(getTotalRefundAmt() + getTotalTaxAmt());
+        return Helper.roundUp(getTotalAmtBeforeTax() + getTotalTaxAmt());
     }
 
     public List<ReturnLineItem> getReturnLineItems() {
@@ -129,8 +92,8 @@ public class ReturnRecord {
         return register;
     }
 
-    public Date getRefundTime() {
-        return refundTime;
+    public Date getTransactionTime() {
+        return transactionTime;
     }
 
     public Cashier getCashier() {

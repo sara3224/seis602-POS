@@ -2,11 +2,7 @@ package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.model.ReturnRecord;
-import edu.stthomas.model.SalesRecord;
 import edu.stthomas.repo.SalesRepo;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Responsible for activities for the actual sale at the register:
@@ -21,17 +17,16 @@ public class PointOfReturn extends AbstractPointOfAction {
     private String reason;
     private ReturnRecord returnRecord;
 
-    public PointOfReturn(int cashierId, Shift shift, int registerId, int saledId) {
-        super(cashierId, shift, registerId);
+    public PointOfReturn(int saledId, int cashierId, Shift shift, int registerId, String  reason) {
+        super(cashierId, shift, registerId) ;
         this.saleId = saledId;
         salesRecord = SalesRepo.getSalesRecord(saledId);
-    }
-
-    public PointOfReturn(int saledId, int cashierId, Shift shift, int registerId, String  reason) {
-        this(cashierId, shift, registerId, saledId) ;
         this.reason = reason;
     }
 
+    /*
+    populat all sales items for returns
+     */
     public void cancelAll(){
         salesRecord.getSalesLineItems().stream().forEach(it-> itemsAndQuantity.put(it.getItemId(), it.getQuantity()));
     }
@@ -52,8 +47,8 @@ public class PointOfReturn extends AbstractPointOfAction {
     @Override
     public void recordPrint() {
         System.out.println("return id: "+returnRecord.getReturnId() + "cashier id: " +returnRecord.getCashier().getId()+ " shift: "+returnRecord.getShift()+" level: "+returnRecord.getCashier().getLevel()+ " Register: "
-                +returnRecord.getRegister().getRegisterId() + " sales amt: " + returnRecord.getTotalRefundAmt() + " sales tax: " +returnRecord.getTotalTaxAmt()
-                +" total amt: " +returnRecord.getTotalAmt() +" return time: " +returnRecord.getRefundTime());
+                +returnRecord.getRegister().getRegisterId() + " sales amt: " + returnRecord.getTotalAmtBeforeTax() + " sales tax: " +returnRecord.getTotalTaxAmt()
+                +" total amt: " +returnRecord.getTotalAmt() +" return time: " +returnRecord.getTransactionTime());
     }
 
 }

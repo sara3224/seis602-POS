@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Map;
 
 public class SalesRecord {
-
     private List<SalesLineItem> salesLineItems;
     private Cashier cashier;
     private Shift shift;
     private Register register;
-    private double totalSalesAmt;
+    private double totalAmtBeforeTax;
     private double totalTaxAmt;
-    private Date salesTime;
+    private Date transactionTime;
     private int id;
     private SalesRepo salesRepo;
 
@@ -28,10 +27,11 @@ public class SalesRecord {
         this.cashier = new Cashier(cashierId);
         this.shift = shift;
         this.register = new Register(registerId);
-        salesTime = Date.from(ZonedDateTime.now().toInstant());
+        transactionTime = Date.from(ZonedDateTime.now().toInstant());
+
         itemsAndQuantity.forEach((key,value)-> salesLineItems.add(new SalesLineItem(key,value)));
         for (SalesLineItem salesLineItem : salesLineItems) {
-            totalSalesAmt += salesLineItem.getLineItemSale();
+            totalAmtBeforeTax += salesLineItem.getLineItemSale();
             totalTaxAmt += salesLineItem.getLineItemTax();
         }
     }
@@ -41,27 +41,24 @@ public class SalesRecord {
         return id;
     }
 
-
-
     public SalesRecord getRecord(int id) {
-        return salesRepo.getSalesRecord(id);
+        return SalesRepo.getSalesRecord(id);
     }
 
     public int getId() {
         return id;
     }
 
-
-    public Date getSalesTime() {
-        return salesTime;
+    public Date getTransactionTime() {
+        return transactionTime;
     }
 
     /**
      * get the total of sales from each line item (excludes tax amt)
      * @return
      */
-    public double getTotalSalesAmt() {
-        return Helper.roundUp(totalSalesAmt);
+    public double getTotalAmtBeforeTax() {
+        return Helper.roundUp(totalAmtBeforeTax);
     }
 
     public double getTotalTaxAmt() {
@@ -69,7 +66,7 @@ public class SalesRecord {
     }
 
     public double getTotalAmt() {
-        return Helper.roundUp(getTotalSalesAmt() + getTotalTaxAmt());
+        return Helper.roundUp(getTotalAmtBeforeTax() + getTotalTaxAmt());
     }
 
     public List<SalesLineItem> getSalesLineItems() {

@@ -6,7 +6,7 @@ import edu.stthomas.model.SalesRecord;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractPointOfAction {
+public abstract class AbstractPointOfAction implements IPointOfAction {
     protected int cashierId;
     protected Shift shift;
     protected int registerId;
@@ -25,14 +25,17 @@ public abstract class AbstractPointOfAction {
      * @param item_id
      * @param qty
      */
+    @Override
     public void addItem(Integer item_id, int qty) {
         itemsAndQuantity.put(item_id, qty);
     }
 
+    @Override
     public Map<Integer, Integer> getItemsAndQuantity() {
         return itemsAndQuantity;
     }
 
+    @Override
     public void removeItem(Integer item_id) {
         getItemsAndQuantity().remove(item_id);
     }

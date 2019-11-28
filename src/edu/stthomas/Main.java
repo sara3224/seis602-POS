@@ -40,7 +40,7 @@ public class Main {
 
         //3.	The system will keep track of the amount of sales ($) at each register for each cashier
         salesDetails();
-        reportZ(Shift.NIGHT, "2019-11-24");
+        reportZ(Shift.NIGHT, "2019-11-28");
         reportX(1001,Shift.DAY,"2019-11-26");
 
         //refund
@@ -62,8 +62,8 @@ public class Main {
             System.out.print(key);
             System.out.println(" sales id: "+ record.getSalesId()+ " return id:"+record.getReturnId() +" cashier id: " +record.getCashier().getId()+ " shift: "
                     +record.getShift()+" level: "+record.getCashier().getLevel()+ " Register: "
-                    +record.getRegister().getRegisterId() + " sales amt: " + record.getTotalRefundAmt() + " sales tax: " +record.getTotalTaxAmt()
-                    +" total amt: " +record.getTotalAmt() +" sales time: " +record.getRefundTime());
+                    +record.getRegister().getRegisterId() + " sales amt: " + record.getTotalAmtBeforeTax() + " sales tax: " +record.getTotalTaxAmt()
+                    +" total amt: " +record.getTotalAmt() +" sales time: " +record.getTransactionTime());
 
             List<ReturnLineItem> returnLineItems = record.getReturnLineItems();
             for(ReturnLineItem lineItem: returnLineItems) {
@@ -84,9 +84,9 @@ public class Main {
     private static void generateReport(Collection<SalesRecord> sales) {
         for(SalesRecord sale: sales) {
             System.out.println(" sales id: "+sale.getId()+"cashier id: " +sale.getCashier().getId()+ " shift: "+sale.getShift()+" level: "+sale.getCashier().getLevel()+ " Register: "
-                    +sale.getRegister().getRegisterId() + " sales amt: " + sale.getTotalSalesAmt() + " sales tax: " +sale.getTotalTaxAmt()
+                    +sale.getRegister().getRegisterId() + " sales amt: " + sale.getTotalAmtBeforeTax() + " sales tax: " +sale.getTotalTaxAmt()
                     +" total amt: " +sale.getTotalAmt()
-                    +" sales time: " +sale.getSalesTime());
+                    +" sales time: " +sale.getTransactionTime());
 
             List<SalesLineItem> salesLineItems = sale.getSalesLineItems();
                 for(SalesLineItem lineItem: salesLineItems) {
@@ -125,20 +125,19 @@ public class Main {
      * @param reportDate
      */
     private static void reportZ(Shift shift, String reportDate) {
-            Collection<SalesRecord> sales = SalesRepo.getSales();
-            System.out.println("Sales report");
-            sales = sales.stream()
-                    .filter(salesRecord -> {
-                        try {
-                            boolean shiftMatch = salesRecord.getShift().equals(shift);
-                            return isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), salesRecord) && shiftMatch;
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        return false;
-                    })
-                    .collect(
-                            Collectors.toList());
+        Collection<SalesRecord> sales = SalesRepo.getSales();
+        System.out.println("Sales Z report ");
+        sales = sales.stream()
+                .filter(salesRecord -> {
+                    try {
+                        boolean shiftMatch = salesRecord.getShift().equals(shift);
+                        return isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), salesRecord) && shiftMatch;
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
         generateReport(sales);
     }
 
@@ -147,7 +146,7 @@ public class Main {
         requestedDate.setTime(reportDate2);
 
         Calendar salesRecordCal = Calendar.getInstance();
-        salesRecordCal.setTime(salesRecord.getSalesTime());
+        salesRecordCal.setTime(salesRecord.getTransactionTime());
 
         return requestedDate.get(Calendar.DAY_OF_YEAR) == salesRecordCal.get(Calendar.DAY_OF_YEAR) &&
                 requestedDate.get(Calendar.YEAR) == salesRecordCal.get(Calendar.YEAR);
