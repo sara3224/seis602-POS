@@ -44,8 +44,13 @@ public class Main {
         reportX(1001,Shift.DAY,"2019-11-26");
 
         //refund
-        PointOfReturn por = new PointOfReturn(1, 1,Shift.DAY,1, "short of cash");
+        PointOfReturn por = new PointOfReturn(1, 1,Shift.DAY,1, "extra purchased");
         por.addItem(1,1);
+        por.complete();
+
+        //refund all
+        por = new PointOfReturn(2, 2,Shift.NIGHT,2, "short of cash");
+        por.cancelAll();
         por.complete();
         generateReturnReport();
     }
@@ -58,14 +63,13 @@ public class Main {
             System.out.println(" sales id: "+ record.getSalesId()+ " return id:"+record.getReturnId() +" cashier id: " +record.getCashier().getId()+ " shift: "
                     +record.getShift()+" level: "+record.getCashier().getLevel()+ " Register: "
                     +record.getRegister().getRegisterId() + " sales amt: " + record.getTotalRefundAmt() + " sales tax: " +record.getTotalTaxAmt()
-                    +" total amt: " +record.getTotalAmt()
-                    +" sales time: " +record.getRefundTime());
+                    +" total amt: " +record.getTotalAmt() +" sales time: " +record.getRefundTime());
 
-            List<ReturnLineItem> returnLineItems= record.getReturnLineItems();
+            List<ReturnLineItem> returnLineItems = record.getReturnLineItems();
             for(ReturnLineItem lineItem: returnLineItems) {
                 System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
                         +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemRefund() +" sale tax: "+lineItem.getLineItemTax()
-                        +" total amt: "+lineItem.getLineItemAmt());
+                        +" total amt: "+lineItem.getLineItemAmt()+ " reason: "+lineItem.getReason());
             }
             System.out.println();
         });

@@ -21,13 +21,6 @@ public class ReturnLineItem {
         this.reason = reason;
     }
 
-//    public ReturnLineItem(int itemId, int quantity) {
-//        this.itemId = itemId;
-//        this.quantity = quantity;
-//        this.price = pricingService.getPrice(itemId);
-//        tax = taxService.getTax(itemId);
-//    }
-
     public int getItemId() {
         return itemId;
     }
@@ -36,6 +29,9 @@ public class ReturnLineItem {
         return quantity;
     }
 
+    public String getReason() {
+        return reason;
+    }
 
     public double getPrice() {
         return price;

@@ -17,40 +17,17 @@ import java.util.Map;
  * trigger replenishment on each sale to order new itemsAndQuantity
  *
  */
-public class PointOfReturn {
-    private int cashierId;
-    private Shift shift;
-    private int registerId;
-    private Map<Integer, Integer> itemsAndQuantity = new HashMap<>();
-    private int saleId;
+public class PointOfReturn extends AbstractPointOfAction {
     private String reason;
     private ReturnRecord returnRecord;
-    private SalesRecord salesRecord;
 
     public PointOfReturn(int saledId, int cashierId, Shift shift, int registerId, String  reason) {
-        this.cashierId = cashierId;
-        this.shift = shift;
-        this.registerId = registerId;
-        this.saleId = saledId;
+        super(cashierId, shift, registerId, saledId);
         this.reason = reason;
-        salesRecord = SalesRepo.getSalesRecord(saledId);
     }
 
-    /**
-     * Overrides the quantity for item.
-     * @param item_id
-     * @param qty
-     */
-    public void addItem(Integer item_id, int qty) {
-        itemsAndQuantity.put(item_id, qty);
-    }
-
-    public Map<Integer, Integer> getItemsAndQuantity() {
-        return itemsAndQuantity;
-    }
-
-    public void removeItem(Integer item_id) {
-        getItemsAndQuantity().remove(item_id);
+    public void cancelAll(){
+        salesRecord.getSalesLineItems().stream().forEach(it-> itemsAndQuantity.put(it.getItemId(), it.getQuantity()));
     }
 
     //call the pricing service to get cost of each item and calculate total
@@ -64,18 +41,10 @@ public class PointOfReturn {
 //        } catch (Exception e) { //validation refund qty more than sales qty or item id not in sales
 //
 //        }
-//        toString();
-//        return returnRecord;
-//        salesRecord.save(salesRecord);
     }
 
     @Override
-    public String toString() {
-        recordPrint();
-        return "";
-    }
-
-    private void recordPrint() {
+    public void recordPrint() {
         System.out.println("return id: "+returnRecord.getReturnId() + "cashier id: " +returnRecord.getCashier().getId()+ " shift: "+returnRecord.getShift()+" level: "+returnRecord.getCashier().getLevel()+ " Register: "
                 +returnRecord.getRegister().getRegisterId() + " sales amt: " + returnRecord.getTotalRefundAmt() + " sales tax: " +returnRecord.getTotalTaxAmt()
                 +" total amt: " +returnRecord.getTotalAmt() +" return time: " +returnRecord.getRefundTime());
