@@ -25,29 +25,14 @@ public abstract class AbstractRecord {
         this.cashier = new Cashier(cashierId);
         this.shift = shift;
         this.register = new Register(registerId);
-        for (SalesLineItem salesLineItem : salesLineItems) {
-            totalAmtBeforeTax += salesLineItem.getLineItemSale();
-            totalTaxAmt += salesLineItem.getLineItemTax();
-        }
-        for (SalesLineItem salesLineItem : salesLineItems) {
-            totalAmtBeforeTax += salesLineItem.getLineItemSale();
-            totalTaxAmt += salesLineItem.getLineItemTax();
-        }
         transactionTime = Date.from(ZonedDateTime.now().toInstant());
     }
-
-//    public abstract int save(AbstractRecord salesRecord);//{
-//        setId(salesRepo.save(salesRecord));
-//        return id;
-//    }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public AbstractRecord getRecord(int id) {
-        return SalesRepo.getSalesRecord(id);
-    }
+    public abstract AbstractRecord getRecord(int id);
 
     public int getId() {
         return id;
