@@ -21,8 +21,14 @@ public class PointOfReturn extends AbstractPointOfAction {
     private String reason;
     private ReturnRecord returnRecord;
 
+    public PointOfReturn(int cashierId, Shift shift, int registerId, int saledId) {
+        super(cashierId, shift, registerId);
+        this.saleId = saledId;
+        salesRecord = SalesRepo.getSalesRecord(saledId);
+    }
+
     public PointOfReturn(int saledId, int cashierId, Shift shift, int registerId, String  reason) {
-        super(cashierId, shift, registerId, saledId);
+        this(cashierId, shift, registerId, saledId) ;
         this.reason = reason;
     }
 

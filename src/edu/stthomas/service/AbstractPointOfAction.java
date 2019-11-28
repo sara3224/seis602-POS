@@ -2,7 +2,6 @@ package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.model.SalesRecord;
-import edu.stthomas.repo.SalesRepo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,12 +14,10 @@ public abstract class AbstractPointOfAction {
     protected int saleId;
     protected SalesRecord salesRecord;
 
-    public AbstractPointOfAction(int cashierId, Shift shift, int registerId, int saledId) {
+    public AbstractPointOfAction(int cashierId, Shift shift, int registerId) {
         this.cashierId = cashierId;
         this.shift = shift;
         this.registerId = registerId;
-        this.saleId = saledId;
-        salesRecord = SalesRepo.getSalesRecord(saledId);
     }
 
     /**
