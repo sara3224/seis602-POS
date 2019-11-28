@@ -36,11 +36,18 @@ public class SalesRecord {
         }
     }
 
-    public void save(SalesRecord salesRecord) {
+    public int save(SalesRecord salesRecord) {
         id = salesRepo.save(salesRecord);
+        return id;
     }
 
-    public int getSalesId() {
+
+
+    public SalesRecord getRecord(int id) {
+        return salesRepo.getSalesRecord(id);
+    }
+
+    public int getId() {
         return id;
     }
 

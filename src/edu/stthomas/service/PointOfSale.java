@@ -2,6 +2,7 @@ package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.model.SalesRecord;
+import edu.stthomas.repo.SalesRepo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class PointOfSale {
     private Shift shift;
     private int registerId;
     private Map<Integer, Integer> itemsAndQuantity = new HashMap<>();
+    SalesRecord sale;
 
     public PointOfSale(int cashierId, Shift shift, int registerId) {
         this.cashierId = cashierId;
@@ -45,8 +47,22 @@ public class PointOfSale {
     }
 
     //call the pricing service to get cost of each item and calculate total
-    public void finalizeSale() {
+    public SalesRecord complete() {
         SalesRecord salesRecord = new SalesRecord(itemsAndQuantity, cashierId, shift, registerId);
-        salesRecord.save(salesRecord);
+        int saleId = salesRecord.save(salesRecord);
+        sale =  salesRecord.getRecord(saleId);
+        return sale;
+    }
+
+    @Override
+    public String toString() {
+        recordPrint();
+        return "";
+    }
+
+    private void recordPrint() {
+        System.out.println("sales id: "+sale.getId() + "cashier id: " +sale.getCashier().getId()+ " shift: "+sale.getShift()+" level: "+sale.getCashier().getLevel()+ " Register: "
+                +sale.getRegister().getRegisterId() + " sales amt: " + sale.getTotalSalesAmt() + " sales tax: " +sale.getTotalTaxAmt()
+                +" total amt: " +sale.getTotalAmt() +" sales time: " +sale.getSalesTime());
     }
 }

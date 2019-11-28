@@ -13,6 +13,11 @@ import java.util.UUID;
  */
 public class ReturnAndCancellationService {
 
+
+    public void cancelSale(int salesId) {
+
+    }
+
     public double cancelSale(UUID saleId) {
 //        PointOfSale refundPos = null;
         double refundAmt = 0.0;
