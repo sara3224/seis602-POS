@@ -5,45 +5,32 @@ import edu.stthomas.helper.Helper;
 import edu.stthomas.repo.ReturnsRepo;
 import edu.stthomas.repo.SalesRepo;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ReturnRecord {
+public class ReturnRecord extends AbstractRecord {
 
     private List<ReturnLineItem> returnLineItems;
-    private Cashier cashier;
-    private Shift shift;
-    private Register register;
-    private double totalAmtBeforeTax;
-    private double totalTaxAmt;
-    private Date transactionTime;
-    private int id;
-    private SalesRepo salesRepo;
     private SalesRecord salesRecord;
     private ReturnsRepo returnsRepo;
     private String reason;
     private int salesId;
 
     public ReturnRecord(Map<Integer, Integer> itemsAndQuantity, int saleId, int cashierId, Shift shift, int registerId, String reason) {
+        super(cashierId,shift,registerId);
         salesRepo = new SalesRepo();
         returnsRepo = new ReturnsRepo();
         this.salesId = saleId;
-        salesRecord = salesRepo.getSalesRecord(salesId);
-        this.cashier = new Cashier(cashierId);
-        this.shift = shift;
-        this.register = new Register(registerId);
-        transactionTime = Date.from(ZonedDateTime.now().toInstant());
+        salesRecord = SalesRepo.getSalesRecord(salesId);
         this.reason = reason;
-        this.salesId = saleId;
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         returnLineItems = new ArrayList<>();
 
         itemsAndQuantity.forEach((key,value) -> {
             SalesLineItem salesLineItem = salesLineItems.stream().filter(it->it.getItemId() == key).findFirst().get();
-            returnLineItems.add(new ReturnLineItem(salesLineItem, value, reason));
+            returnLineItems.add(new ReturnLineItem(salesLineItem, value, this.reason));
         });
 
         for (ReturnLineItem returnLineItem: returnLineItems) {
@@ -53,8 +40,8 @@ public class ReturnRecord {
     }
 
     public int save(ReturnRecord returnsRecord) {
-        id = returnsRepo.save(returnsRecord);
-        return id;
+        setId(returnsRepo.save(returnsRecord));
+        return getId();
     }
 
     public ReturnRecord getRecord(int id) {
@@ -63,10 +50,6 @@ public class ReturnRecord {
 
     public int getSalesId() {
         return salesId;
-    }
-
-    public int getReturnId() {
-        return id;
     }
 
     /**

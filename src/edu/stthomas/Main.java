@@ -49,9 +49,9 @@ public class Main {
         por.complete();
 
         //refund all
-        por = new PointOfReturn(2, 2,Shift.NIGHT,2, "short of cash");
-        por.cancelAll();
-        por.complete();
+        PointOfReturn por2 = new PointOfReturn(2, 2,Shift.NIGHT,2, "short of cash");
+        por2.cancelAll();
+        por2.complete();
         generateReturnReport();
     }
 
@@ -60,7 +60,7 @@ public class Main {
         System.out.println("Return report:");
         returns.forEach((key,record) -> {
             System.out.print(key);
-            System.out.println(" sales id: "+ record.getSalesId()+ " return id:"+record.getReturnId() +" cashier id: " +record.getCashier().getId()+ " shift: "
+            System.out.println(" sales id: "+ record.getSalesId()+ " return id:"+record.getId() +" cashier id: " +record.getCashier().getId()+ " shift: "
                     +record.getShift()+" level: "+record.getCashier().getLevel()+ " Register: "
                     +record.getRegister().getRegisterId() + " sales amt: " + record.getTotalAmtBeforeTax() + " sales tax: " +record.getTotalTaxAmt()
                     +" total amt: " +record.getTotalAmt() +" sales time: " +record.getTransactionTime());

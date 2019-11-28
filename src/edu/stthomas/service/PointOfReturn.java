@@ -46,9 +46,8 @@ public class PointOfReturn extends AbstractPointOfAction {
 
     @Override
     public void recordPrint() {
-        System.out.println("return id: "+returnRecord.getReturnId() + "cashier id: " +returnRecord.getCashier().getId()+ " shift: "+returnRecord.getShift()+" level: "+returnRecord.getCashier().getLevel()+ " Register: "
+        System.out.println("return id: "+returnRecord.getId() + "cashier id: " +returnRecord.getCashier().getId()+ " shift: "+returnRecord.getShift()+" level: "+returnRecord.getCashier().getLevel()+ " Register: "
                 +returnRecord.getRegister().getRegisterId() + " sales amt: " + returnRecord.getTotalAmtBeforeTax() + " sales tax: " +returnRecord.getTotalTaxAmt()
                 +" total amt: " +returnRecord.getTotalAmt() +" return time: " +returnRecord.getTransactionTime());
     }
-
 }
