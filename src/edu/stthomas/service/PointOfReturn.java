@@ -25,7 +25,7 @@ public class PointOfReturn extends AbstractPointOfAction {
     }
 
     /*
-    populat all sales items for returns
+    populate all sales items for returns
      */
     public void cancelAll(){
         salesRecord.getSalesLineItems().stream().forEach(it-> itemsAndQuantity.put(it.getItemId(), it.getQuantity()));

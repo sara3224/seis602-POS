@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class TaxService {
 
-    static Map<Integer, Double> tax = new HashMap<>();
+    private static Map<Integer, Double> tax = new HashMap<>();
 
     static{
         tax.put(1, 0.075);

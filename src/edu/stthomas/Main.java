@@ -68,7 +68,7 @@ public class Main {
             List<ReturnLineItem> returnLineItems = record.getReturnLineItems();
             for(ReturnLineItem lineItem: returnLineItems) {
                 System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
-                        +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemRefund() +" sale tax: "+lineItem.getLineItemTax()
+                        +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAntBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
                         +" total amt: "+lineItem.getLineItemAmt()+ " reason: "+lineItem.getReason());
             }
             System.out.println();
@@ -92,7 +92,7 @@ public class Main {
                 for(SalesLineItem lineItem: salesLineItems) {
                     //4.	Registers will record the register number, the user (cashier), the dates and times of sale, sale items, and the amount of sales.
                     System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
-                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemSale() +" sale tax: "+lineItem.getLineItemTax()
+                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAntBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
                     +" total amt: "+lineItem.getLineItemAmt());
                 }
                 System.out.println();

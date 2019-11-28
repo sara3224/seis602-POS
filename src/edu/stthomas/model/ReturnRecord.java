@@ -34,7 +34,7 @@ public class ReturnRecord extends AbstractRecord {
         });
 
         for (ReturnLineItem returnLineItem: returnLineItems) {
-            totalAmtBeforeTax += returnLineItem.getLineItemRefund();
+            totalAmtBeforeTax += returnLineItem.getLineItemAntBeforeTax();
             totalTaxAmt += returnLineItem.getLineItemTax();
         }
     }

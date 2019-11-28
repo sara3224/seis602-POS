@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class Cashier {
     private int id;
-    private int level;
     private static Map<Integer, Integer> cashierLevels = new HashMap<>();
 
     static {

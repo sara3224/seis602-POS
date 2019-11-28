@@ -1,11 +1,7 @@
 package edu.stthomas.service;
 
+//TODO Call the reporting stuff from main to here.
 public class ReportingService {
-//    private List<PointOfSale> sales;
-
-//    public void addRecord(PointOfSale sale) {
-//
-//    }
 
 
 }

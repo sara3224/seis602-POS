@@ -13,7 +13,7 @@ public class SalesRecord extends AbstractRecord {
         itemsAndQuantity.forEach((key,value)-> salesLineItems.add(new SalesLineItem(key,value)));
 
         for (SalesLineItem salesLineItem : salesLineItems) {
-            totalAmtBeforeTax += salesLineItem.getLineItemSale();
+            totalAmtBeforeTax += salesLineItem.getLineItemAntBeforeTax();
             totalTaxAmt += salesLineItem.getLineItemTax();
         }
     }

@@ -8,6 +8,10 @@ public class AbstractLineItem {
     protected double price;
     protected double tax;
 
+    public AbstractLineItem(int quantity) {
+        this.quantity = quantity;
+    }
+
     public AbstractLineItem(int itemId, int quantity) {
         this.itemId = itemId;
         this.quantity = quantity;
@@ -29,12 +33,12 @@ public class AbstractLineItem {
         return tax;
     }
 
-    public double getLineItemSale() {
+    public double getLineItemAntBeforeTax() {
         return Helper.roundUp(getQuantity() * getPrice());
     }
 
     public double getLineItemTax() {
-        return Helper.roundUp(getLineItemSale() * getTax());
+        return Helper.roundUp(getLineItemAntBeforeTax() * getTax());
     }
 
     /**
@@ -42,6 +46,6 @@ public class AbstractLineItem {
      * @return
      */
     public double getLineItemAmt() {
-        return Helper.roundUp(getLineItemSale() + getLineItemTax());
+        return Helper.roundUp(getLineItemAntBeforeTax() + getLineItemTax());
     }
 }
