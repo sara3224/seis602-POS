@@ -23,3 +23,7 @@
 hs_err_pid*
 *.iml
 .idea
+.DS_Store
+out/
+src/.DS_Store
+src/edu/.DS_Store
