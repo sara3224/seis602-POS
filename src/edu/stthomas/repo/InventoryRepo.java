@@ -13,7 +13,7 @@ public class InventoryRepo {
 
         String item = itemId + "\t" + qty + "\t" + price +"\t" + threshold +"\n";
 
-        try (FileWriter fw = new FileWriter("./" + "inventory.txt",true);
+        try (FileWriter fw = new FileWriter("./data/" + "inventory.txt",true);
              BufferedWriter writer = new BufferedWriter(fw)) {
             writer.write(item);
         } catch (IOException e) {
