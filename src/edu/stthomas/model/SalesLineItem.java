@@ -9,6 +9,7 @@ public class SalesLineItem extends AbstractLineItem {
 
     public SalesLineItem(int itemId, int quantity) {
         super(itemId, quantity);
+        //TODO: get price from the inventory.txt
         this.price = pricingService.getPrice(itemId);
         tax = taxService.getTax(itemId);
     }

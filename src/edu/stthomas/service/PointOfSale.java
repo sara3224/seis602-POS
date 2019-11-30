@@ -1,8 +1,10 @@
 package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
+import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesRecord;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,15 +21,17 @@ public class PointOfSale extends AbstractPointOfAction {
         super(cashierId, shift, registerId);
     }
 
+    @Override
     public Map<Integer, Integer> getItemsAndQuantity() {
         return itemsAndQuantity;
     }
 
     //call the pricing service to get cost of each item and calculate total
     public SalesRecord complete() {
-        SalesRecord salesRecord = new SalesRecord(itemsAndQuantity, cashierId, shift, registerId);
+        salesRecord = new SalesRecord(itemsAndQuantity, cashierId, shift, registerId);
         int saleId = salesRecord.save(salesRecord);
         salesRecord =  salesRecord.getRecord(saleId);
+        recordPrint();
         return salesRecord;
     }
 
@@ -38,8 +42,16 @@ public class PointOfSale extends AbstractPointOfAction {
     }
 
     public void recordPrint() {
-        System.out.println("sales id: "+salesRecord.getId() + "cashier id: " +salesRecord.getCashier().getId()+ " shift: "+salesRecord.getShift()+" level: "+salesRecord.getCashier().getLevel()+ " Register: "
+        System.out.println("sales id: "+salesRecord.getId() + " cashier id: " +salesRecord.getCashier().getId()+ " shift: "+salesRecord.getShift()+" level: "+salesRecord.getCashier().getLevel()+ " Register: "
                 +salesRecord.getRegister().getRegisterId() + " sales amt: " + salesRecord.getTotalAmtBeforeTax() + " sales tax: " +salesRecord.getTotalTaxAmt()
                 +" total amt: " +salesRecord.getTotalAmt() +" sales time: " +salesRecord.getTransactionTime());
+        List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
+        for(SalesLineItem lineItem: salesLineItems) {
+            //4.	Registers will record the register number, the user (cashier), the dates and times of sale, sale items, and the amount of sales.
+            System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
+                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAntBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
+                    +" total amt: "+lineItem.getLineItemAmt());
+        }
+        System.out.println();
     }
 }

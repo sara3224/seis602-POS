@@ -66,7 +66,7 @@ public class InventoryRepo {
     public static void removeItem(int itemId) {
         try (BufferedReader br = new BufferedReader(new FileReader(inventory))) {
             String st;
-            String attributes[] = new String[5];
+            String attributes[];
             while ((st = br.readLine()) != null) {
                 attributes = st.split("\t");
                 if (attributes[0].equals(Integer.toString(itemId))) {

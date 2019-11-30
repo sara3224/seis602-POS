@@ -1,6 +1,8 @@
 package edu.stthomas.client;
 
+import edu.stthomas.enums.Shift;
 import edu.stthomas.repo.InventoryRepo;
+import edu.stthomas.service.PointOfSale;
 
 import java.util.Scanner;
 
@@ -18,6 +20,20 @@ public class Client {
                 case "2":
                     System.out.println("Delete Inventory");
                     InventoryRepo.removeItem(getInt("enter item Id:"));
+                    break;
+                case "11": //POS
+                    System.out.println("Enter cashier and register details");
+                    PointOfSale pos = new PointOfSale(getInt("enter cashier id"), Shift.valueOf(getString("Enter shift day or night").toUpperCase()), getInt("Enter register id"));
+                    String next = null;
+                    while(!"X".equals(next)) {
+                        pos.addItem((getInt("enter item id")), getInt("enter quantity"));
+                        System.out.println("press X to finalize POS or C to enter next item id");
+                        next = myObj.next();
+                        if("X".equals(next)) {
+                            pos.complete();
+                        }
+                    }
+                    System.out.println("Thanks..transaction is done..");
                     break;
                 case "X":
                     System.out.println("Good bye!");
@@ -39,13 +55,29 @@ public class Client {
     /**
      * @return
      */
+    private static String getString(String desc) {
+        System.out.println(desc);
+        String input = "";
+        try {
+            input = myObj.next();
+        }catch (Exception e) {
+            throw new NumberFormatException("input should be a integer");
+        }
+        return input;
+    }
+
+    /**
+     * @return
+     */
     private static int getInt(String desc) {
         System.out.println(desc);
         int input = 0;
         try {
             input = myObj.nextInt();
         }catch (Exception e) {
-            throw new NumberFormatException("input should be a integer");
+//            throw new NumberFormatException("input should be a integer");
+            System.out.println("Enter only numeric value");
+            return getInt(desc);
         }
         return input;
     }
@@ -69,6 +101,7 @@ public class Client {
         stringBuilder.append("Please select one of the following options\n");
         stringBuilder.append("1\tInventory -- add item \n");
         stringBuilder.append("2\tInventory -- delete item \n");
+        stringBuilder.append("11\tPOS -- new sale\n");
         stringBuilder.append("X\tTo Exit the Application\n");
         stringBuilder.append(" \tSelection:\n");
 
