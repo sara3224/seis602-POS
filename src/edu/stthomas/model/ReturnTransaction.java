@@ -9,18 +9,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class ReturnRecord extends AbstractRecord {
+public class ReturnTransaction extends AbstractTransaction {
 
     private List<ReturnLineItem> returnLineItems;
     private ReturnsRepo returnsRepo;
     private String reason;
     private int salesId;
 
-    public ReturnRecord(Map<Integer, Integer> itemsAndQuantity, int saleId, int cashierId, Shift shift, int registerId, String reason) {
+    public ReturnTransaction(Map<Integer, Integer> itemsAndQuantity, int saleId, int cashierId, Shift shift, int registerId, String reason) {
         super(cashierId,shift,registerId);
         returnsRepo = new ReturnsRepo();
         this.salesId = saleId;
-        SalesRecord salesRecord = SalesRepo.getSalesRecord(salesId);
+        SalesTransaction salesRecord = SalesRepo.getSalesRecord(salesId);
         this.reason = reason;
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         returnLineItems = new ArrayList<>();
@@ -39,12 +39,12 @@ public class ReturnRecord extends AbstractRecord {
         }
     }
 
-    public int save(ReturnRecord returnsRecord) {
+    public int save(ReturnTransaction returnsRecord) {
         setId(returnsRepo.save(returnsRecord));
         return getId();
     }
 
-    public ReturnRecord getRecord(int id) {
+    public ReturnTransaction getRecord(int id) {
         return returnsRepo.getReturnsRecord(id);
     }
 

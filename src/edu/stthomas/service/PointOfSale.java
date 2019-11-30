@@ -2,7 +2,7 @@ package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.model.SalesLineItem;
-import edu.stthomas.model.SalesRecord;
+import edu.stthomas.model.SalesTransaction;
 
 import java.util.List;
 import java.util.Map;
@@ -27,8 +27,8 @@ public class PointOfSale extends AbstractPointOfAction {
     }
 
     //call the pricing service to get cost of each item and calculate total
-    public SalesRecord complete() {
-        salesRecord = new SalesRecord(itemsAndQuantity, cashierId, shift, registerId);
+    public SalesTransaction complete() {
+        salesRecord = new SalesTransaction(itemsAndQuantity, cashierId, shift, registerId);
         int saleId = salesRecord.save(salesRecord);
         salesRecord =  salesRecord.getRecord(saleId);
         recordPrint();

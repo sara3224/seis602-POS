@@ -1,7 +1,7 @@
 package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
-import edu.stthomas.model.SalesRecord;
+import edu.stthomas.model.SalesTransaction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ public abstract class AbstractPointOfAction implements IPointOfAction {
     protected int registerId;
     protected Map<Integer, Integer> itemsAndQuantity = new HashMap<>();
     protected int saleId;
-    protected SalesRecord salesRecord;
+    protected SalesTransaction salesRecord;
 
     public AbstractPointOfAction(int cashierId, Shift shift, int registerId) {
         this.cashierId = cashierId;

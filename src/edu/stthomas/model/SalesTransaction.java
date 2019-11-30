@@ -5,9 +5,9 @@ import edu.stthomas.repo.SalesRepo;
 
 import java.util.Map;
 
-public class SalesRecord extends AbstractRecord {
+public class SalesTransaction extends AbstractTransaction {
 
-    public SalesRecord(Map<Integer, Integer> itemsAndQuantity, int cashierId, Shift shift, int registerId) {
+    public SalesTransaction(Map<Integer, Integer> itemsAndQuantity, int cashierId, Shift shift, int registerId) {
         super(cashierId, shift, registerId);
         salesRepo = new SalesRepo();
         itemsAndQuantity.forEach((key,value)-> salesLineItems.add(new SalesLineItem(key,value)));
@@ -17,11 +17,11 @@ public class SalesRecord extends AbstractRecord {
             totalTaxAmt += salesLineItem.getLineItemTax();
         }
     }
-    public SalesRecord getRecord(int id) {
+    public SalesTransaction getRecord(int id) {
         return SalesRepo.getSalesRecord(id);
     }
 
-    public int save(SalesRecord salesRecord) {
+    public int save(SalesTransaction salesRecord) {
         setId(salesRepo.save(salesRecord));
         return getId();
     }

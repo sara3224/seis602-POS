@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public abstract class AbstractRecord {
+public abstract class AbstractTransaction implements Transaction {
     protected List<SalesLineItem> salesLineItems;
     protected Cashier cashier;
     protected Shift shift;
@@ -20,7 +20,7 @@ public abstract class AbstractRecord {
     protected SalesRepo salesRepo;
     private int id;
 
-    public AbstractRecord(int cashierId, Shift shift, int registerId) {
+    public AbstractTransaction(int cashierId, Shift shift, int registerId) {
         this.salesLineItems = new ArrayList<>();
         this.cashier = new Cashier(cashierId);
         this.shift = shift;
@@ -32,7 +32,7 @@ public abstract class AbstractRecord {
         this.id = id;
     }
 
-    public abstract AbstractRecord getRecord(int id);
+    public abstract AbstractTransaction getRecord(int id);
 
     public int getId() {
         return id;

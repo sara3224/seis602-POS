@@ -1,7 +1,7 @@
 package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
-import edu.stthomas.model.ReturnRecord;
+import edu.stthomas.model.ReturnTransaction;
 import edu.stthomas.repo.SalesRepo;
 
 /**
@@ -15,7 +15,7 @@ import edu.stthomas.repo.SalesRepo;
  */
 public class PointOfReturn extends AbstractPointOfAction {
     private String reason;
-    private ReturnRecord returnRecord;
+    private ReturnTransaction returnRecord;
 
     public PointOfReturn(int saledId, int cashierId, Shift shift, int registerId, String  reason) {
         super(cashierId, shift, registerId) ;
@@ -33,8 +33,8 @@ public class PointOfReturn extends AbstractPointOfAction {
 
     //call the pricing service to get cost of each item and calculate total
     //return details of refund with item, qty for line item and total refund amt
-    public ReturnRecord complete() {
-          returnRecord = new ReturnRecord(itemsAndQuantity, saleId, cashierId, shift, registerId, reason);
+    public ReturnTransaction complete() {
+          returnRecord = new ReturnTransaction(itemsAndQuantity, saleId, cashierId, shift, registerId, reason);
 //        try {
             int id = returnRecord.save(returnRecord);
             returnRecord =  returnRecord.getRecord(id);

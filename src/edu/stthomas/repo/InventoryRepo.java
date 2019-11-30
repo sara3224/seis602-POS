@@ -16,13 +16,12 @@ import java.nio.file.Files;
  */
 public class InventoryRepo {
     private static File inventory = new File("./data/" + "inventory.txt");
+
     public static void addItem(int itemId, int qty, double price, int threshold)  {
         if(itemExist(itemId)) {
             System.out.println("Item exists");//TODO: prevent from adding new entry
         }
-
         String item = itemId + "\t" + qty + "\t" + price +"\t" + threshold +"\n";
-
         try (FileWriter fw = new FileWriter(inventory,true);
              BufferedWriter writer = new BufferedWriter(fw)) {
             writer.write(item);
@@ -42,7 +41,6 @@ public class InventoryRepo {
         }
         return temp.renameTo(inventory);
     }
-
 
     static boolean itemExist(int itemId) {
         boolean exist = false;

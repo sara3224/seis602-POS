@@ -3,9 +3,9 @@ package edu.stthomas;
 import edu.stthomas.client.Client;
 import edu.stthomas.enums.Shift;
 import edu.stthomas.model.ReturnLineItem;
-import edu.stthomas.model.ReturnRecord;
+import edu.stthomas.model.ReturnTransaction;
 import edu.stthomas.model.SalesLineItem;
-import edu.stthomas.model.SalesRecord;
+import edu.stthomas.model.SalesTransaction;
 import edu.stthomas.repo.ReturnsRepo;
 import edu.stthomas.repo.SalesRepo;
 import edu.stthomas.service.PointOfReturn;
@@ -20,6 +20,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ TODO:during sale: Invalid item id on POS system., invalid register
+ TODO:during return: validate if sales id is valid, qty is less or equal to sold item qty, avoid second return, avoid multiple returns, support return reason at item level.
+TODO:extract POS and POR in abstract class and/or interface.
+TODO:Check for inventory before allowing to enter quantity.
+TODO:No item id found during sale. Enter 9999 item id or do not allow to add?
+TODO:Default check for item exists.
+TODO:Search inventory(Optional)
+TODO:Refactoring of class names and repackaging
+TODO:Add some welcome header, store name, etc
+ */
 public class Main {
     public static void main(String[] args) {
 
@@ -59,7 +70,7 @@ public class Main {
     }
 
     private static void generateReturnReport() {
-        Map<Integer,ReturnRecord> returns = ReturnsRepo.getAllReturns();
+        Map<Integer, ReturnTransaction> returns = ReturnsRepo.getAllReturns();
         System.out.println("Return report:");
         returns.forEach((key,record) -> {
             System.out.print(key);
@@ -79,13 +90,13 @@ public class Main {
     }
 
     private static void salesDetails() {
-        Collection<SalesRecord> sales = SalesRepo.getSales();
+        Collection<SalesTransaction> sales = SalesRepo.getSales();
         System.out.println("Sales report...excludes returns");
         generateReport(sales);
     }
 
-    private static void generateReport(Collection<SalesRecord> sales) {
-        for(SalesRecord sale: sales) {
+    private static void generateReport(Collection<SalesTransaction> sales) {
+        for(SalesTransaction sale: sales) {
             System.out.println(" sales id: "+sale.getId()+"cashier id: " +sale.getCashier().getId()+ " shift: "+sale.getShift()+" level: "+sale.getCashier().getLevel()+ " Register: "
                     +sale.getRegister().getRegisterId() + " sales amt: " + sale.getTotalAmtBeforeTax() + " sales tax: " +sale.getTotalTaxAmt()
                     +" total amt: " +sale.getTotalAmt()
@@ -107,7 +118,7 @@ public class Main {
      * @param reportDate
      */
     private static void reportX(int cashierId, Shift shift, String reportDate) {
-        Collection<SalesRecord> sales = SalesRepo.getSales();
+        Collection<SalesTransaction> sales = SalesRepo.getSales();
         System.out.println("Sales report");
         sales = sales.stream()
                 .filter(salesRecord -> {
@@ -128,7 +139,7 @@ public class Main {
      * @param reportDate
      */
     private static void reportZ(Shift shift, String reportDate) {
-        Collection<SalesRecord> sales = SalesRepo.getSales();
+        Collection<SalesTransaction> sales = SalesRepo.getSales();
         System.out.println("Sales Z report ");
         sales = sales.stream()
                 .filter(salesRecord -> {
@@ -144,7 +155,7 @@ public class Main {
         generateReport(sales);
     }
 
-    private static boolean isSameDay(Date reportDate2, SalesRecord salesRecord) {
+    private static boolean isSameDay(Date reportDate2, SalesTransaction salesRecord) {
         Calendar requestedDate = Calendar.getInstance();
         requestedDate.setTime(reportDate2);
 
