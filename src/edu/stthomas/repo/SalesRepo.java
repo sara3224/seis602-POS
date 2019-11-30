@@ -12,13 +12,11 @@ public class SalesRepo {
     public static final Map<Integer, SalesTransaction> sales = new HashMap<>();
 
     private static int salesId = 0;
-    private int id;
 
     public int save(SalesTransaction salesRecord) {
-        id = ++salesId;
-        sales.put(id, salesRecord);
+        sales.put(++salesId, salesRecord);
         //TODO sold qty from deduct from inventory.txt..look InventoryRepo
-        return id;
+        return salesId;
     }
 
     public static Collection<SalesTransaction> getSales() {

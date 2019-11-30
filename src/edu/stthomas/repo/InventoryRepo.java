@@ -1,6 +1,5 @@
 package edu.stthomas.repo;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -64,7 +63,7 @@ public class InventoryRepo {
     public static void removeItem(int itemId) {
         try (BufferedReader br = new BufferedReader(new FileReader(inventory))) {
             String st;
-            String attributes[];
+            String[] attributes;
             while ((st = br.readLine()) != null) {
                 attributes = st.split("\t");
                 if (attributes[0].equals(Integer.toString(itemId))) {

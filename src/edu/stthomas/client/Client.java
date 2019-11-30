@@ -75,9 +75,7 @@ public class Client {
         try {
             input = myObj.nextInt();
         }catch (Exception e) {
-//            throw new NumberFormatException("input should be a integer");
-            System.out.println("Enter only numeric value");
-            return getInt(desc);
+            throw new NumberFormatException("input should be a integer");
         }
         return input;
     }
