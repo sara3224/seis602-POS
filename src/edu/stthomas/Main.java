@@ -1,5 +1,6 @@
 package edu.stthomas;
 
+import edu.stthomas.client.Client;
 import edu.stthomas.enums.Shift;
 import edu.stthomas.model.ReturnLineItem;
 import edu.stthomas.model.ReturnRecord;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
+
         //1.	Allow the cashier to start a new sale and allow add/remove items to a new sale
         PointOfSale pos = new PointOfSale(1001, Shift.DAY, 1);
         pos.addItem(1, 2);
@@ -53,6 +55,7 @@ public class Main {
         por2.cancelAll();
         por2.complete();
         generateReturnReport();
+        Client.start();
     }
 
     private static void generateReturnReport() {
