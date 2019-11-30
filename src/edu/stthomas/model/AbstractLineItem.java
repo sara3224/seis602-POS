@@ -2,7 +2,7 @@ package edu.stthomas.model;
 
 import edu.stthomas.helper.Helper;
 
-public class AbstractLineItem {
+public class AbstractLineItem implements LineItem {
     protected int itemId;
     protected int quantity;
     protected double price;
