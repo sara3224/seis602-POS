@@ -15,6 +15,10 @@ public class Client {
                     System.out.println("Add Inventory");
                     InventoryRepo.addItem(getInt("enter item Id:"),getInt("enter quantity"),getDouble("enter price"), getInt("enter threshold"));
                     break;
+                case "2":
+                    System.out.println("Delete Inventory");
+                    InventoryRepo.removeItem(getInt("enter item Id:"));
+                    break;
                 case "X":
                     System.out.println("Good bye!");
                     System.exit(0);
@@ -64,6 +68,7 @@ public class Client {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Please select one of the following options\n");
         stringBuilder.append("1\tInventory -- add item \n");
+        stringBuilder.append("2\tInventory -- delete item \n");
         stringBuilder.append("X\tTo Exit the Application\n");
         stringBuilder.append(" \tSelection:\n");
 
