@@ -1,5 +1,8 @@
 package edu.stthomas.repo;
 
+import edu.stthomas.helper.Helper;
+import edu.stthomas.model.Item;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,16 +17,29 @@ import java.nio.file.Files;
  * Open a file and add item details (replace existing item details)
  */
 public class InventoryRepo {
-    private static File inventory = new File("./data/" + "inventory.txt");
+    private static File inventory = new File("./data/" + "inventory.tsv");
 
-    public static void addItem(int itemId, int qty, double price, int threshold)  {
+    public static void addItem(int itemId, int qty, double price, double tax, int threshold)  {
         if(itemExist(itemId)) {
             System.out.println("Item exists");//TODO: prevent from adding new entry
         }
-        String item = itemId + "\t" + qty + "\t" + price +"\t" + threshold +"\n";
+        String item = itemId + "\t" + qty + "\t" + price +"\t" + Helper.roundUp(tax/100) + "\t" + threshold + "\t" + 0 +"\n";
         try (FileWriter fw = new FileWriter(inventory,true);
              BufferedWriter writer = new BufferedWriter(fw)) {
             writer.write(item);
+        } catch (IOException e) {
+            System.out.println("item addition failed: "+item);
+        }
+    }
+
+    public static void updateItem(Item updatedItem)  {
+        removeItem(updatedItem.getItemId());
+        String item = updatedItem.getItemId()+ "\t" + updatedItem.getQty() + "\t" + updatedItem.getPrice() +"\t"
+                + updatedItem.getTax() + "\t" + updatedItem.getThreshold() + "\t" + updatedItem.getOutstanding() +"\n";
+
+        try (FileWriter fw = new FileWriter(inventory,true);
+             BufferedWriter writer = new BufferedWriter(fw)) {
+             writer.write(item);
         } catch (IOException e) {
             System.out.println("item addition failed: "+item);
         }
@@ -58,6 +74,27 @@ public class InventoryRepo {
             System.out.println("item deletion failed: "+itemId);
         }
         return exist;
+    }
+
+    public static Item getItem(int itemId) {
+        Item item = null;
+        try (BufferedReader br = new BufferedReader(new FileReader(inventory))) {
+            String st;
+            String[] attributes;
+            while ((st = br.readLine()) != null) {
+                attributes = st.split("\t");
+                if (attributes[0].equals(Integer.toString(itemId))) {
+                    item = new Item(itemId, Integer.valueOf(attributes[1]), Double.valueOf(attributes[2]),
+                            Double.valueOf(attributes[3]), Integer.valueOf(attributes[4]),
+                            Integer.valueOf(attributes[5]));
+                }
+            }
+        } catch (FileNotFoundException fnf) {
+            System.out.println("item deletion failed: "+itemId);
+        } catch(IOException io) {
+            System.out.println("item deletion failed: "+itemId);
+        }
+        return item;
     }
 
     public static void removeItem(int itemId) {

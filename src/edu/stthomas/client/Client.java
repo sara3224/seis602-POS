@@ -15,7 +15,8 @@ public class Client {
             switch (choice) {
                 case "1":
                     System.out.println("Add Inventory");
-                    InventoryRepo.addItem(getInt("enter item Id:"),getInt("enter quantity"),getDouble("enter price"), getInt("enter threshold"));
+                    InventoryRepo.addItem(getInt("enter item Id:"),getInt("enter quantity"),getDouble("enter price"),
+                            getDouble("enter tax percentage"), getInt("enter threshold"));
                     break;
                 case "2":
                     System.out.println("Delete Inventory");
@@ -23,7 +24,8 @@ public class Client {
                     break;
                 case "11": //POS
                     System.out.println("Enter cashier and register details");
-                    PointOfSale pos = new PointOfSale(getInt("enter cashier id"), Shift.valueOf(getString("Enter shift day or night").toUpperCase()), getInt("Enter register id"));
+                    PointOfSale pos = new PointOfSale(getInt("enter cashier id"), Shift.valueOf(getString("Enter shift day or night").toUpperCase()),
+                            getInt("Enter register id"));
                     String next = null;
                     while(!"X".equals(next)) {
                         pos.addItem((getInt("enter item id")), getInt("enter quantity"));
@@ -101,7 +103,6 @@ public class Client {
         stringBuilder.append("2\tInventory -- delete item \n");
         stringBuilder.append("11\tPOS -- new sale\n");
         stringBuilder.append("X\tTo Exit the Application\n");
-        stringBuilder.append(" \tSelection:\n");
 
         return stringBuilder.toString();
     }

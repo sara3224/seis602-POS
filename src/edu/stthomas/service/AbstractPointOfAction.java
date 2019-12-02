@@ -27,6 +27,7 @@ public abstract class AbstractPointOfAction implements IPointOfAction {
      */
     @Override
     public void addItem(Integer item_id, int qty) {
+        //TODO: check in itemId exists.
         itemsAndQuantity.put(item_id, qty);
     }
 

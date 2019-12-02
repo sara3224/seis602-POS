@@ -1,5 +1,7 @@
 package edu.stthomas.repo;
 
+import edu.stthomas.model.Item;
+import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
 
 import java.util.Collection;
@@ -16,7 +18,28 @@ public class SalesRepo {
     public int save(SalesTransaction salesRecord) {
         sales.put(++salesId, salesRecord);
         //TODO sold qty from deduct from inventory.txt..look InventoryRepo
+        updateInventory(salesRecord);
         return salesId;
+    }
+
+    /**
+     * Only valid transaction update inventory
+     * @param salesRecord
+     */
+    private void updateInventory(SalesTransaction salesRecord) {
+        for (SalesLineItem salesLineItem: salesRecord.getSalesLineItems()) {
+            Item item = InventoryRepo.getItem(salesLineItem.getItemId());
+            int newOH =  (item.getQty() - salesLineItem.getQuantity());
+            int outStanding = item.getOutstanding();
+            if(newOH < 0) {
+                outStanding = item.getOutstanding() + Math.abs(newOH);
+            }
+            int updatedQty = newOH>=0 ? newOH:0;
+            Item updatedItem = new Item(item.getItemId(),updatedQty, item.getPrice(), item.getTax(),
+                    item.getThreshold(), outStanding);
+
+            InventoryRepo.updateItem(updatedItem);
+        }
     }
 
     public static Collection<SalesTransaction> getSales() {
