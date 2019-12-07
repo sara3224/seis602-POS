@@ -1,2 +1,4 @@
 id	quantity	price	tax	threshold	outstanding
 10	0	300.0	0.02	1	10
+10	2	10.0	0.03	4	0
+1	200	100.0	0.12	300	0

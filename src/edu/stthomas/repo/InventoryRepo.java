@@ -21,7 +21,8 @@ public class InventoryRepo {
 
     public static void addItem(int itemId, int qty, double price, double tax, int threshold)  {
         if(itemExist(itemId)) {
-            System.out.println("Item exists");//TODO: prevent from adding new entry
+            System.out.println("Item exists");
+            removeItem(itemId);
         }
         String item = itemId + "\t" + qty + "\t" + price +"\t" + Helper.roundUp(tax/100) + "\t" + threshold + "\t" + 0 +"\n";
         try (FileWriter fw = new FileWriter(inventory,true);
