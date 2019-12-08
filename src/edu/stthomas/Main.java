@@ -8,8 +8,6 @@ import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
 import edu.stthomas.repo.ReturnsRepo;
 import edu.stthomas.repo.SalesRepo;
-import edu.stthomas.service.PointOfReturn;
-import edu.stthomas.service.PointOfSale;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +41,8 @@ public class Main {
 //        pos.addItem(3,5);
 //        pos.addItem(3,1);//correction in the sale quantity
 //        //2.	Once all items are added to the sale the cashier will request for cash to finalize the sale.
-//        pos.complete();
+//        SalesTransaction salesTransaction = pos.complete();
+//
 //
 //        pos = new PointOfSale(1002, Shift.NIGHT, 2);
 //        pos.addItem(1, 1);
@@ -66,7 +66,9 @@ public class Main {
 //        por2.cancelAll();
 //        por2.complete();
 //        generateReturnReport();
-        Client.start();
+        Client client = new Client();
+        client.login();
+//        Client.start();
     }
 
     private static void generateReturnReport() {
@@ -82,20 +84,20 @@ public class Main {
             List<ReturnLineItem> returnLineItems = record.getReturnLineItems();
             for(ReturnLineItem lineItem: returnLineItems) {
                 System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
-                        +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAntBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
+                        +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAmtBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
                         +" total amt: "+lineItem.getLineItemAmt()+ " reason: "+lineItem.getReason());
             }
             System.out.println();
         });
     }
 
-    private static void salesDetails() {
+    public static void salesDetails() {
         Collection<SalesTransaction> sales = SalesRepo.getSales();
         System.out.println("Sales report...excludes returns");
         generateReport(sales);
     }
 
-    private static void generateReport(Collection<SalesTransaction> sales) {
+    public static void generateReport(Collection<SalesTransaction> sales) {
         for(SalesTransaction sale: sales) {
             System.out.println(" sales id: "+sale.getId()+"cashier id: " +sale.getCashier().getId()+ " shift: "+sale.getShift()+" level: "+sale.getCashier().getLevel()+ " Register: "
                     +sale.getRegister().getRegisterId() + " sales amt: " + sale.getTotalAmtBeforeTax() + " sales tax: " +sale.getTotalTaxAmt()
@@ -106,7 +108,7 @@ public class Main {
                 for(SalesLineItem lineItem: salesLineItems) {
                     //4.	Registers will record the register number, the user (cashier), the dates and times of sale, sale items, and the amount of sales.
                     System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
-                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAntBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
+                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAmtBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
                     +" total amt: "+lineItem.getLineItemAmt());
                 }
                 System.out.println();
@@ -117,13 +119,13 @@ public class Main {
      *
      * @param reportDate
      */
-    private static void reportX(int cashierId, Shift shift, String reportDate) {
+    private static void reportX(String cashierId, Shift shift, String reportDate) {
         Collection<SalesTransaction> sales = SalesRepo.getSales();
         System.out.println("Sales report");
         sales = sales.stream()
                 .filter(salesRecord -> {
                     try {
-                        boolean isSameCashier = salesRecord.getCashier().getId() == cashierId;
+                        boolean isSameCashier = Objects.equals(salesRecord.getCashier().getId(),cashierId);
                         boolean shiftMatch = salesRecord.getShift().equals(shift);
                         return isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), salesRecord) && isSameCashier && shiftMatch;
                     } catch (ParseException e) {

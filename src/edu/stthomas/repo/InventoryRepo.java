@@ -19,12 +19,14 @@ import java.nio.file.Files;
 public class InventoryRepo {
     private static File inventory = new File("./data/" + "inventory.tsv");
 
-    public static void addItem(int itemId, int qty, double price, double tax, int threshold)  {
+    //TODO: refactor the class to extend AbstractPointOfAction
+    public static void addItem(int itemId, String name, int onhands, double price, double tax, int threshold, int supplierId, int reOrderQty)  {
         if(itemExist(itemId)) {
             System.out.println("Item exists");
             removeItem(itemId);
         }
-        String item = itemId + "\t" + qty + "\t" + price +"\t" + Helper.roundUp(tax/100) + "\t" + threshold + "\t" + 0 +"\n";
+        String item = itemId + "\t" + name + "\t" +onhands + "\t" + price +"\t" + Helper.roundUp(tax/100) + "\t"
+                + threshold + "\t" + supplierId + "\t" + reOrderQty + "\t" + 0 +"\n";
         try (FileWriter fw = new FileWriter(inventory,true);
              BufferedWriter writer = new BufferedWriter(fw)) {
             writer.write(item);
@@ -35,8 +37,9 @@ public class InventoryRepo {
 
     public static void updateItem(Item updatedItem)  {
         removeItem(updatedItem.getItemId());
-        String item = updatedItem.getItemId()+ "\t" + updatedItem.getQty() + "\t" + updatedItem.getPrice() +"\t"
-                + updatedItem.getTax() + "\t" + updatedItem.getThreshold() + "\t" + updatedItem.getOutstanding() +"\n";
+        String item = updatedItem.getItemId()+ "\t" + updatedItem.getName() + "\t" + updatedItem.getOnhands() + "\t" + updatedItem.getPrice() +"\t"
+                + updatedItem.getTax() + "\t" + updatedItem.getThreshold() + "\t" + updatedItem.getSupplierId() + "\t"
+                + updatedItem.getReorderQty() + "\t" +updatedItem.getPending() +"\n";
 
         try (FileWriter fw = new FileWriter(inventory,true);
              BufferedWriter writer = new BufferedWriter(fw)) {
@@ -85,9 +88,9 @@ public class InventoryRepo {
             while ((st = br.readLine()) != null) {
                 attributes = st.split("\t");
                 if (attributes[0].equals(Integer.toString(itemId))) {
-                    item = new Item(itemId, Integer.valueOf(attributes[1]), Double.valueOf(attributes[2]),
-                            Double.valueOf(attributes[3]), Integer.valueOf(attributes[4]),
-                            Integer.valueOf(attributes[5]));
+                    item = new Item(itemId, attributes[1], Integer.valueOf(attributes[2]), Double.valueOf(attributes[3]),
+                            Double.valueOf(attributes[4]), Integer.valueOf(attributes[5]),
+                            Integer.valueOf(attributes[6]),Integer.valueOf(attributes[7]),Integer.valueOf(attributes[8]));
                 }
             }
         } catch (FileNotFoundException fnf) {

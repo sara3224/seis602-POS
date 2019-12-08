@@ -1,8 +1,11 @@
 package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
+import edu.stthomas.exceptions.POSException;
+import edu.stthomas.model.Item;
 import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
+import edu.stthomas.repo.InventoryRepo;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,11 @@ import java.util.Map;
  *
  */
 public class PointOfSale extends AbstractPointOfAction {
-    public PointOfSale(int cashierId, Shift shift, int registerId) {
+//    public PointOfSale(int cashierId, Shift shift, int registerId) {
+//        super(cashierId, shift, registerId);
+//    }
+
+    public PointOfSale(String cashierId, Shift shift, int registerId) {
         super(cashierId, shift, registerId);
     }
 
@@ -27,9 +34,22 @@ public class PointOfSale extends AbstractPointOfAction {
     }
 
     //call the pricing service to get cost of each item and calculate total
-    public SalesTransaction complete() {
+    public SalesTransaction complete() throws POSException {
+        //validate if items are still in inventory
+        for(Map.Entry<Integer,Integer> itemQty: getItemsAndQuantity().entrySet()) {
+            int itemId = itemQty.getKey();
+            int qty = itemQty.getValue();
+            Item item = InventoryRepo.getItem(itemId);
+            if(item == null) {
+                throw new POSException("Item is no longer avaliable. Item: " +item+ " does not exist...Please re-start trasnaction.");
+            } else if(qty > item.getOnhands()) {
+                throw new POSException("item" +item.getItemId() + " " + item.getName() + " max quantity available is: "+item.getOnhands() +" Please re-start trasnaction.");
+            }
+        }
         salesRecord = new SalesTransaction(itemsAndQuantity, cashierId, shift, registerId);
-        int saleId = salesRecord.save(salesRecord);
+//        int saleId = salesRecord.save(salesRecord);
+        String saleId = salesRecord.save(salesRecord);
+//        salesRecord =  salesRecord.getRecord(saleId);
         salesRecord =  salesRecord.getRecord(saleId);
         recordPrint();
         return salesRecord;
@@ -49,7 +69,7 @@ public class PointOfSale extends AbstractPointOfAction {
         for(SalesLineItem lineItem: salesLineItems) {
             //4.	Registers will record the register number, the user (cashier), the dates and times of sale, sale items, and the amount of sales.
             System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
-                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAntBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
+                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAmtBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
                     +" total amt: "+lineItem.getLineItemAmt());
         }
         System.out.println();

@@ -1,38 +1,90 @@
 package edu.stthomas.client;
 
 import edu.stthomas.enums.Shift;
+import edu.stthomas.exceptions.POSException;
 import edu.stthomas.repo.InventoryRepo;
 import edu.stthomas.service.PointOfSale;
+import edu.stthomas.service.User;
 
 import java.util.Scanner;
 
 public class Client {
+    User user;
+    Integer registerId; //TODO: change to string
+    Shift shift; //TODO: Change to String
+
     static Scanner myObj = new Scanner(System.in);
-    public static void start() {
+
+    public void login() {
+        System.out.println("Welcome to SEIS 602 POS System!!!. Please enter credentials to get started....");
+        String userId = getString("UserId:");
+        String password = getString("Enter password");
+        if(User.authenticate(userId,password)){
+            System.out.println("*****Welcome to POS system...you are authenticated as: " + userId + " Please enter shift and register*****\n");
+            this.user = new User(userId);
+            register();
+        } else {
+            System.out.println("Invalid userid and password combination..please re-enter credentials!!!");
+            login();
+        }
+    }
+
+    private void register() {
+        try {
+            registerId = getInt("Enter register");
+            shift();
+        } catch (Exception e) {
+            System.out.println("Enter number for register id");
+//            register();
+        }
+    }
+
+    private void shift() {
+        try {
+            shift = Shift.valueOf(getString("Enter shift").toUpperCase());
+            start();
+        } catch(Exception e){
+            System.out.println("Enter either day or night for shift");
+//            shift();
+        }
+    }
+
+    //TODO: report X and report Y by one level 2
+    private void start() {
         System.out.println(initialScreen());
         try {
             String choice = myObj.nextLine();  // Read user input
             switch (choice) {
                 case "1":
-                    System.out.println("Add Inventory");
-                    InventoryRepo.addItem(getInt("enter item Id:"),getInt("enter quantity"),getDouble("enter price"),
-                            getDouble("enter tax percentage"), getInt("enter threshold"));
+                    System.out.println("Add Item");
+                    InventoryRepo.addItem(getInt("enter item Id:"),getString("enter item description"), getInt("enter on hands quantity"),getDouble("enter price"),
+                            getDouble("enter tax percentage"), getInt("enter threshold"), getInt("enter supplier id"), getInt("enter replenishment quantity"));
                     break;
                 case "2":
-                    System.out.println("Delete Inventory");
+                    System.out.println("Delete Item");
                     InventoryRepo.removeItem(getInt("enter item Id:"));
                     break;
                 case "11": //POS
-                    System.out.println("Enter cashier and register details");
-                    PointOfSale pos = new PointOfSale(getInt("enter cashier id"), Shift.valueOf(getString("Enter shift day or night").toUpperCase()),
-                            getInt("Enter register id"));
+                    System.out.println("Enter items and quantity");
+//                    PointOfSale pos = new PointOfSale(getInt("enter cashier id"), Shift.valueOf(getString("Enter shift day or night").toUpperCase()),
+//                            getInt("Enter register id"));
+                    PointOfSale pos = new PointOfSale(user.getId(), shift,registerId);
                     String next = null;
                     while(!"X".equals(next)) {
-                        pos.addItem((getInt("enter item id")), getInt("enter quantity"));
-                        System.out.println("press X to finalize POS or C to enter next item id");
-                        next = myObj.next();
-                        if("X".equals(next)) {
-                            pos.complete();
+                        String itemAdded = pos.addItem((getInt("enter item id")), getInt("enter quantity"));
+                        if(!itemAdded.equals("")) {
+                            System.out.println(itemAdded);
+                        } else {
+                            System.out.println("press X to finalize POS or C to enter next item id");
+                            next = myObj.next();
+                            if ("X".equals(next)) {
+                                try {
+                                    pos.complete();
+                                } catch (POSException e) {
+                                    System.out.println(e.getMessage());
+                                    break;
+                                }
+                            }
                         }
                     }
                     System.out.println("Thanks..transaction is done..");
@@ -42,7 +94,6 @@ public class Client {
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Please enter one of the given options");
                     start();
                     break;
             }
@@ -63,7 +114,7 @@ public class Client {
         try {
             input = myObj.next();
         }catch (Exception e) {
-            throw new NumberFormatException("input should be a integer");
+            throw new NumberFormatException("input should be a string");
         }
         return input;
     }

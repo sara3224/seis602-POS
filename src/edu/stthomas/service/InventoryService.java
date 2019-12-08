@@ -9,7 +9,7 @@ public class InventoryService {
     private double price;
     private int threshold;
 
-    public void registerItem(int itemId, int qty, int price, double tax, int threshold) {
-        InventoryRepo.addItem(itemId, qty, price,tax, threshold);
-    }
+//    public void registerItem(int itemId, int qty, int price, double tax, int threshold) {
+//        InventoryRepo.addItem(itemId, qty, price,tax, threshold);
+//    }
 }

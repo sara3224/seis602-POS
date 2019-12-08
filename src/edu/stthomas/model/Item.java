@@ -5,27 +5,37 @@ package edu.stthomas.model;
  */
 public class Item {
     private int itemId;
-    private int qty;
+    private String name;
+    private int onhands;
     private double price;
     private double tax;
     private int threshold;
-    private int outstanding;
+    private int supplierId;
+    private int reorderQty;
+    private int pending;
 
-    public Item(int itemId, int qty, double price, double tax, int threshold, int outstanding) {
+    public Item(int itemId, String name, int onhands, double price, double tax, int threshold, int supplierId, int reorderQty, int pending) {
         this.itemId = itemId;
+        this.name = name;
+        this.onhands = onhands;
         this.price = price;
         this.tax = tax;
-        this.qty = qty;
         this.threshold = threshold;
-        this.outstanding = outstanding;
+        this.supplierId = supplierId;
+        this.reorderQty = reorderQty;
+        this.pending = pending;
     }
 
     public int getItemId() {
         return itemId;
     }
 
-    public int getThreshold() {
-        return threshold;
+    public String getName() {
+        return name;
+    }
+
+    public int getOnhands(){
+        return onhands;
     }
 
     public double getPrice() {
@@ -36,11 +46,19 @@ public class Item {
         return tax;
     }
 
-    public int getQty(){
-        return qty;
+    public int getThreshold() {
+        return threshold;
     }
 
-    public int getOutstanding() {
-        return outstanding;
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public int getReorderQty() {
+        return reorderQty;
+    }
+
+    public int getPending() {
+        return pending;
     }
 }

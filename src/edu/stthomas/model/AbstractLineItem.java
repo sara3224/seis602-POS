@@ -33,12 +33,12 @@ public class AbstractLineItem implements LineItem {
         return tax;
     }
 
-    public double getLineItemAntBeforeTax() {
+    public double getLineItemAmtBeforeTax() {
         return Helper.roundUp(getQuantity() * getPrice());
     }
 
     public double getLineItemTax() {
-        return Helper.roundUp(getLineItemAntBeforeTax() * getTax());
+        return Helper.roundUp(getLineItemAmtBeforeTax() * getTax());
     }
 
     /**
@@ -46,6 +46,6 @@ public class AbstractLineItem implements LineItem {
      * @return
      */
     public double getLineItemAmt() {
-        return Helper.roundUp(getLineItemAntBeforeTax() + getLineItemTax());
+        return Helper.roundUp(getLineItemAmtBeforeTax() + getLineItemTax());
     }
 }

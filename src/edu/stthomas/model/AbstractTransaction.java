@@ -3,6 +3,7 @@ package edu.stthomas.model;
 import edu.stthomas.enums.Shift;
 import edu.stthomas.helper.Helper;
 import edu.stthomas.repo.SalesRepo;
+import edu.stthomas.service.User;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -11,30 +12,37 @@ import java.util.List;
 
 public abstract class AbstractTransaction implements Transaction {
     protected List<SalesLineItem> salesLineItems;
-    protected Cashier cashier;
+//    protected Cashier cashier;
+    protected User cashier;
     protected Shift shift;
     protected Register register;
     protected double totalAmtBeforeTax;
     protected double totalTaxAmt;
     protected Date transactionTime;
     protected SalesRepo salesRepo;
-    private int id;
+//    private int id;
+    private String id;
 
-    public AbstractTransaction(int cashierId, Shift shift, int registerId) {
+//    public AbstractTransaction(int cashierId, Shift shift, int registerId) {
+    public AbstractTransaction(String cashierId, Shift shift, int registerId) {
         this.salesLineItems = new ArrayList<>();
-        this.cashier = new Cashier(cashierId);
+//        this.cashier = new Cashier(cashierId);
+        this.cashier = new User(cashierId);
         this.shift = shift;
         this.register = new Register(registerId);
         transactionTime = Date.from(ZonedDateTime.now().toInstant());
     }
 
-    public void setId(int id) {
+//    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public abstract AbstractTransaction getRecord(int id);
+//    public abstract AbstractTransaction getRecord(int id);
+    public abstract AbstractTransaction getRecord(String id);
 
-    public int getId() {
+//    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -66,7 +74,8 @@ public abstract class AbstractTransaction implements Transaction {
         return register;
     }
 
-    public Cashier getCashier() {
+//    public Cashier getCashier() {
+    public User getCashier() {
         return cashier;
     }
 

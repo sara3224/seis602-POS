@@ -14,9 +14,12 @@ public class ReturnTransaction extends AbstractTransaction {
     private List<ReturnLineItem> returnLineItems;
     private ReturnsRepo returnsRepo;
     private String reason;
-    private int salesId;
+//    private int salesId;
+    private String salesId;
 
-    public ReturnTransaction(Map<Integer, Integer> itemsAndQuantity, int saleId, int cashierId, Shift shift, int registerId, String reason) {
+//    public ReturnTransaction(Map<Integer, Integer> itemsAndQuantity, int saleId, int cashierId, Shift shift, int registerId, String reason) {
+//    public ReturnTransaction(Map<Integer, Integer> itemsAndQuantity, int saleId, String cashierId, Shift shift, int registerId, String reason) {
+    public ReturnTransaction(Map<Integer, Integer> itemsAndQuantity, String saleId, String cashierId, Shift shift, int registerId, String reason) {
         super(cashierId,shift,registerId);
         returnsRepo = new ReturnsRepo();
         this.salesId = saleId;
@@ -34,21 +37,25 @@ public class ReturnTransaction extends AbstractTransaction {
         });
 
         for (ReturnLineItem returnLineItem: returnLineItems) {
-            totalAmtBeforeTax += returnLineItem.getLineItemAntBeforeTax();
+            totalAmtBeforeTax += returnLineItem.getLineItemAmtBeforeTax();
             totalTaxAmt += returnLineItem.getLineItemTax();
         }
     }
 
-    public int save(ReturnTransaction returnsRecord) {
+//    public int save(ReturnTransaction returnsRecord) {
+    public String save(ReturnTransaction returnsRecord) {
         setId(returnsRepo.save(returnsRecord));
         return getId();
     }
 
-    public ReturnTransaction getRecord(int id) {
+//    public ReturnTransaction getRecord(int id) {
+    public ReturnTransaction getRecord(String id) {
+//        return returnsRepo.getReturnsRecord(id);
         return returnsRepo.getReturnsRecord(id);
     }
 
-    public int getSalesId() {
+//    public int getSalesId() {
+    public String getSalesId() {
         return salesId;
     }
 
