@@ -1,2 +1,3 @@
 id	name	onhands	price	tax	threshold	supplierid	reorderquantity	pending
-1	item_1	80	10.0	0.1	90	1	10	10
+-10	item_	10	100.0	0.1	20	1	20	20
+2	item_2	7	199.0	0.01	5	2	2	0

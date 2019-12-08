@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class SalesTransaction extends AbstractTransaction {
 
-//    public SalesTransaction(Map<Integer, Integer> itemsAndQuantity, int cashierId, Shift shift, int registerId) {
     public SalesTransaction(Map<Integer, Integer> itemsAndQuantity, String cashierId, Shift shift, int registerId) {
         super(cashierId, shift, registerId);
         salesRepo = new SalesRepo();
@@ -18,12 +17,10 @@ public class SalesTransaction extends AbstractTransaction {
             totalTaxAmt += salesLineItem.getLineItemTax();
         }
     }
-//    public SalesTransaction getRecord(int id) {
     public SalesTransaction getRecord(String id) {
         return SalesRepo.getSalesRecord(id);
     }
 
-//    public int save(SalesTransaction salesRecord) {
     public String save(SalesTransaction salesRecord) {
         setId(salesRepo.save(salesRecord));
         return getId();

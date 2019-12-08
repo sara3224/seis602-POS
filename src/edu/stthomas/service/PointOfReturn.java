@@ -17,8 +17,6 @@ public class PointOfReturn extends AbstractPointOfAction {
     private String reason;
     private ReturnTransaction returnRecord;
 
-//    public PointOfReturn(int saledId, int cashierId, Shift shift, int registerId, String  reason) {
-//    public PointOfReturn(int saledId, String cashierId, Shift shift, int registerId, String  reason) {
     public PointOfReturn(String saledId, String cashierId, Shift shift, int registerId, String  reason) {
         super(cashierId, shift, registerId) ;
         this.saleId = saledId;
@@ -37,14 +35,9 @@ public class PointOfReturn extends AbstractPointOfAction {
     //return details of refund with item, qty for line item and total refund amt
     public ReturnTransaction complete() {
           returnRecord = new ReturnTransaction(itemsAndQuantity, saleId, cashierId, shift, registerId, reason);
-//        try {
-//            int id = returnRecord.save(returnRecord);
             String id = returnRecord.save(returnRecord);
             returnRecord =  returnRecord.getRecord(id);
             return returnRecord;
-//        } catch (Exception e) { //validation refund qty more than sales qty or item id not in sales
-//
-//        }
     }
 
     @Override

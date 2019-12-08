@@ -7,9 +7,9 @@ import edu.stthomas.service.PointOfSale;
 import edu.stthomas.service.User;
 
 import java.util.Scanner;
-
+//TODO: support return with sales id and items
 public class Client {
-    User user;
+    User user; //TODO level 1 can only do 11 i.e POS and returns. rest all i.e add inventory, remove and report level 2
     Integer registerId; //TODO: change to string
     Shift shift; //TODO: Change to String
 
@@ -57,8 +57,8 @@ public class Client {
             switch (choice) {
                 case "1":
                     System.out.println("Add Item");
-                    InventoryRepo.addItem(getInt("enter item Id:"),getString("enter item description"), getInt("enter on hands quantity"),getDouble("enter price"),
-                            getDouble("enter tax percentage"), getInt("enter threshold"), getInt("enter supplier id"), getInt("enter replenishment quantity"));
+                    InventoryRepo.addItem(getInt("enter item Id:"),getString("enter item description"), getPositiveInt("enter on hands quantity"),getDouble("enter price"),
+                            getDouble("enter tax percentage"), getPositiveInt("enter threshold"), getInt("enter supplier id"), getPositiveInt("enter replenishment quantity"));
                     break;
                 case "2":
                     System.out.println("Delete Item");
@@ -128,7 +128,24 @@ public class Client {
         try {
             input = myObj.nextInt();
         }catch (Exception e) {
-            throw new NumberFormatException("input should be a integer");
+            throw new NumberFormatException("input should be a number");
+        }
+        return input;
+    }
+
+    /**
+     * @return
+     */
+    private static int getPositiveInt(String desc) {
+        System.out.println(desc);
+        int input = 0;
+        try {
+            input = myObj.nextInt();
+            if (input <= 0) {
+                throw new NumberFormatException();
+            }
+        }catch (Exception e) {
+            throw new NumberFormatException("input should be a positive integer");
         }
         return input;
     }
@@ -143,6 +160,23 @@ public class Client {
             dbl = myObj.nextDouble();
         }catch (Exception e) {
             throw new NumberFormatException("inpout should be a double");
+        }
+        return dbl;
+    }
+
+    /**
+     * @return
+     */
+    private static double getPositiveDouble(String desc) {
+        System.out.println(desc);
+        double dbl = 0;
+        try {
+            dbl = myObj.nextDouble();
+            if(dbl<0) {
+                throw new NumberFormatException();
+            }
+        }catch (Exception e) {
+            throw new NumberFormatException("inpout should be positive a double");
         }
         return dbl;
     }

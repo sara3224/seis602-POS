@@ -20,10 +20,6 @@ import java.util.Map;
  *
  */
 public class PointOfSale extends AbstractPointOfAction {
-//    public PointOfSale(int cashierId, Shift shift, int registerId) {
-//        super(cashierId, shift, registerId);
-//    }
-
     public PointOfSale(String cashierId, Shift shift, int registerId) {
         super(cashierId, shift, registerId);
     }
@@ -47,9 +43,7 @@ public class PointOfSale extends AbstractPointOfAction {
             }
         }
         salesRecord = new SalesTransaction(itemsAndQuantity, cashierId, shift, registerId);
-//        int saleId = salesRecord.save(salesRecord);
         String saleId = salesRecord.save(salesRecord);
-//        salesRecord =  salesRecord.getRecord(saleId);
         salesRecord =  salesRecord.getRecord(saleId);
         recordPrint();
         return salesRecord;

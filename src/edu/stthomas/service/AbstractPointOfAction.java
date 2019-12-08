@@ -9,20 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractPointOfAction implements IPointOfAction {
-//    protected int cashierId;
     protected String cashierId;
     protected Shift shift;
     protected int registerId;
     protected Map<Integer, Integer> itemsAndQuantity = new HashMap<>();
-//    protected int saleId;
     protected String saleId;
     protected SalesTransaction salesRecord;
 
-//    public AbstractPointOfAction(int cashierId, Shift shift, int registerId) {
-//        this.cashierId = cashierId;
-//        this.shift = shift;
-//        this.registerId = registerId;
-//    }
 
     public AbstractPointOfAction(String cashierId, Shift shift, int registerId) {
         this.cashierId = cashierId;
