@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * manage sales transactions
+ */
 public class SalesRepo {
     //TODO: report x
     //TODO report y
