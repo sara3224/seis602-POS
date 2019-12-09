@@ -21,6 +21,8 @@ public abstract class AbstractTransaction implements Transaction {
     protected SalesRepo salesRepo;
     private String id;
 
+    public AbstractTransaction(){};
+
     public AbstractTransaction(String cashierId, Shift shift, int registerId) {
         this.salesLineItems = new ArrayList<>();
         this.cashier = new User(cashierId);

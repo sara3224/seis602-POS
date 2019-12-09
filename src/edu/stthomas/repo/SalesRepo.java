@@ -4,14 +4,19 @@ import edu.stthomas.model.Item;
 import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -90,7 +95,42 @@ public class SalesRepo {
         return sales.values();
     }
 
+    /**
+     * get sales record from the sales and salesLineitems tsv file
+     * @param salesId
+     * @return
+     */
     public static SalesTransaction getSalesRecord(String salesId) {
         return sales.get(salesId);
+    }
+
+    /**
+     * get sales record from the sales and salesLineitems tsv file
+     * @param salesId
+     * @return
+     */
+    public static SalesTransaction getSalesRecordForReturns(String salesId) {
+        SalesTransaction salesTransaction = sales.get(salesId);
+        if(salesTransaction == null) {
+            salesTransaction = new SalesTransaction();
+            List<SalesLineItem> salesLineItems = new ArrayList<>();
+            try {
+                try (BufferedReader br = new BufferedReader(new FileReader(salesItemsFile))) {
+                    String str;
+                    while ((str = br.readLine()) != null) { //loop until end of file.
+                        String[] line = str.split("\t");
+                        if (Objects.equals(line[0], salesId)) {
+                            salesLineItems.add(new SalesLineItem(Integer.valueOf(line[1]), Integer.valueOf(line[2]),Double.valueOf(line[3]), Double.valueOf(line[4])));
+                        }
+                    }
+                }
+                salesTransaction = new SalesTransaction(salesLineItems);
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found" + e);
+            } catch (IOException e) {
+                System.out.println("File not found" + e);
+            }
+        }
+        return salesTransaction;
     }
 }

@@ -9,4 +9,10 @@ public class SalesLineItem extends AbstractLineItem {
         price = item.getPrice();
         tax = item.getTax();
     }
+
+    public SalesLineItem(int itemId, int quantity, double price, double tax) {
+        super(itemId, quantity);
+        this.price = price;
+        this.tax = tax;
+    }
 }

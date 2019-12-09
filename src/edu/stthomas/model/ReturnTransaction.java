@@ -20,7 +20,7 @@ public class ReturnTransaction extends AbstractTransaction {
         super(cashierId,shift,registerId);
         returnsRepo = new ReturnsRepo();
         this.salesId = saleId;
-        SalesTransaction salesRecord = SalesRepo.getSalesRecord(salesId);
+        SalesTransaction salesRecord = SalesRepo.getSalesRecordForReturns(salesId);
         this.reason = reason;
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         returnLineItems = new ArrayList<>();

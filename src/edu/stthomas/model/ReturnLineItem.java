@@ -11,6 +11,14 @@ public class ReturnLineItem extends AbstractLineItem {
         this.reason = reason;
     }
 
+//    public ReturnLineItem(SalesLineItem salesLineItem, int qty, String reason) {
+//        super(qty);
+//        this.itemId = salesLineItem.getItemId();
+//        this.price = salesLineItem.getPrice();
+//        this.tax = salesLineItem.getTax();
+//        this.reason = reason;
+//    }
+
     public String getReason() {
         return reason;
     }

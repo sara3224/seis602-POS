@@ -2,10 +2,14 @@ package edu.stthomas.client;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.exceptions.POSException;
+import edu.stthomas.model.SalesTransaction;
 import edu.stthomas.repo.InventoryRepo;
+import edu.stthomas.repo.SalesRepo;
+import edu.stthomas.service.PointOfReturn;
 import edu.stthomas.service.PointOfSale;
 import edu.stthomas.service.User;
 
+import java.util.Objects;
 import java.util.Scanner;
 //TODO: support return with sales id and items
 public class Client {
@@ -35,7 +39,6 @@ public class Client {
             shift();
         } catch (Exception e) {
             System.out.println("Enter number for register id");
-//            register();
         }
     }
 
@@ -45,20 +48,19 @@ public class Client {
             start();
         } catch(Exception e){
             System.out.println("Enter either day or night for shift");
-//            shift();
         }
     }
 
     //TODO: report X and report Y by one level 2
-    private void start() {
+    public void start() {
         System.out.println(initialScreen());
         try {
             String choice = myObj.nextLine();  // Read user input
             switch (choice) {
                 case "1":
                     System.out.println("Add Item");
-                    InventoryRepo.addItem(getInt("enter item Id:"),getString("enter item description"), getPositiveInt("enter on hands quantity"),getDouble("enter price"),
-                            getDouble("enter tax percentage"), getPositiveInt("enter threshold"), getInt("enter supplier id"), getPositiveInt("enter replenishment quantity"));
+                    InventoryRepo.addItem(getInt("enter item Id:"),getString("enter item description"), getPositiveInt("enter on hands quantity"),getPositiveDouble("enter price"),
+                            getPositiveDouble("enter tax percentage"), getPositiveInt("enter threshold"), getInt("enter supplier id"), getPositiveInt("enter replenishment quantity"));
                     break;
                 case "2":
                     System.out.println("Delete Item");
@@ -66,11 +68,11 @@ public class Client {
                     break;
                 case "11": //POS
                     System.out.println("Enter items and quantity");
-//                    PointOfSale pos = new PointOfSale(getInt("enter cashier id"), Shift.valueOf(getString("Enter shift day or night").toUpperCase()),
-//                            getInt("Enter register id"));
-                    PointOfSale pos = new PointOfSale(user.getId(), shift,registerId);
+                    PointOfSale pos = new PointOfSale(user.getId(), shift,registerId);//TODO: remove comment
+//                    PointOfSale pos = new PointOfSale("sara3224", Shift.NIGHT,1);
                     String next = null;
-                    while(!"X".equals(next)) {
+//                    while(!"X".equals(next)) {
+                    while(!Objects.equals("X",next)) {
                         String itemAdded = pos.addItem((getInt("enter item id")), getInt("enter quantity"));
                         if(!itemAdded.equals("")) {
                             System.out.println(itemAdded);
@@ -81,7 +83,7 @@ public class Client {
                                 try {
                                     pos.complete();
                                 } catch (POSException e) {
-                                    System.out.println(e.getMessage());
+                                    System.out.println(e.getStackTrace());
                                     break;
                                 }
                             }
@@ -89,6 +91,40 @@ public class Client {
                     }
                     System.out.println("Thanks..transaction is done..");
                     break;
+                case "12": //POS returns
+//                    String returnsalesId = getString("Enter salesId");
+                    String nextInput = null;
+                    while(!Objects.equals("X",nextInput)) {
+//                        System.out.println("Enter sales Id:");
+                        String salesId = getString("Enter sales Id:");
+                        SalesTransaction salesTransaction = SalesRepo.getSalesRecordForReturns(salesId);
+                        if(salesTransaction.getSalesLineItems().size() == 0) {
+                            System.out.println("salesId: "+salesId +" does not exists, please enter a valid sales id for returning items");
+                            break;
+                        }
+                        System.out.println("press X to cancel all sales or C to return an item for sales");
+//                        System.out.println("press X to finalize POS or C to enter next item id");
+                        nextInput = myObj.next();
+                        PointOfReturn pointOfReturn = new PointOfReturn(nextInput, user.getId(), shift, registerId,"");//TODO uncomment
+//                        PointOfReturn pointOfReturn = new PointOfReturn(salesId,"1001", Shift.DAY,1,"");
+                        if ("X".equals(nextInput)) {
+                            try {
+                                pointOfReturn.cancelAll();
+                                pointOfReturn.complete();
+                            } catch (POSException e) {
+                                System.out.println(e.getMessage());
+                                break;
+                            }
+                        } else {
+                            pointOfReturn.addItem((getInt("enter item id")), getInt("enter quantity"));
+                            pointOfReturn.complete();
+                            System.out.println("Thanks..cancellation is done..");
+                            break;
+                        }
+                    }
+//                    System.out.println("Thanks..cancellation is done..");
+                    break;
+                    //TODO check if sales id exist
                 case "X":
                     System.out.println("Good bye!");
                     System.exit(0);
@@ -98,7 +134,7 @@ public class Client {
                     break;
             }
         }catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace());
         }
         System.out.println("");
         //repeat until option X is selected
@@ -176,7 +212,7 @@ public class Client {
                 throw new NumberFormatException();
             }
         }catch (Exception e) {
-            throw new NumberFormatException("inpout should be positive a double");
+            throw new NumberFormatException("input should be positive a double");
         }
         return dbl;
     }
@@ -187,6 +223,7 @@ public class Client {
         stringBuilder.append("1\tInventory -- add item \n");
         stringBuilder.append("2\tInventory -- delete item \n");
         stringBuilder.append("11\tPOS -- new sale\n");
+        stringBuilder.append("12\tPOS -- returns\n");
         stringBuilder.append("X\tTo Exit the Application\n");
 
         return stringBuilder.toString();

@@ -67,12 +67,12 @@ public class Main {
 //        por2.complete();
 //        generateReturnReport();
         Client client = new Client();
-        client.login();
-//        Client.start();
+        client.login();//temp using start
+//        client.start();
     }
 
     private static void generateReturnReport() {
-        Map<Integer, ReturnTransaction> returns = ReturnsRepo.getAllReturns();
+        Map<String, ReturnTransaction> returns = ReturnsRepo.getAllReturns();
         System.out.println("Return report:");
         returns.forEach((key,record) -> {
             System.out.print(key);
