@@ -27,3 +27,4 @@ hs_err_pid*
 out/
 src/.DS_Store
 src/edu/.DS_Store
+/bin/
