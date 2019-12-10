@@ -9,6 +9,7 @@ import edu.stthomas.model.SalesTransaction;
 import edu.stthomas.repo.ReturnsRepo;
 import edu.stthomas.repo.SalesRepo;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -119,7 +120,7 @@ public class Main {
      *
      * @param reportDate
      */
-    private static void reportX(String cashierId, Shift shift, String reportDate) {
+    public static void reportX(String cashierId, Shift shift, String reportDate) {
         Collection<SalesTransaction> sales = SalesRepo.getSales();
         System.out.println("Sales report");
         sales = sales.stream()
@@ -162,7 +163,11 @@ public class Main {
         requestedDate.setTime(reportDate2);
 
         Calendar salesRecordCal = Calendar.getInstance();
-        salesRecordCal.setTime(salesRecord.getTransactionTime());
+        try {
+            salesRecordCal.setTime(DateFormat.getInstance().parse(salesRecord.getTransactionTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return requestedDate.get(Calendar.DAY_OF_YEAR) == salesRecordCal.get(Calendar.DAY_OF_YEAR) &&
                 requestedDate.get(Calendar.YEAR) == salesRecordCal.get(Calendar.YEAR);

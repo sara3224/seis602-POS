@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 public class SalesTransaction extends AbstractTransaction {
+    private String registerId;
+    private double totalAmt;
+    private String reportDate;
 
     public SalesTransaction() {
-
     }
 
     public SalesTransaction(Map<Integer, Integer> itemsAndQuantity, String cashierId, Shift shift, int registerId) {
@@ -38,6 +40,31 @@ public class SalesTransaction extends AbstractTransaction {
             totalAmtBeforeTax += salesLineItem.getLineItemAmtBeforeTax();
             totalTaxAmt += salesLineItem.getLineItemTax();
         }
+    }
+
+    public void setReportDate(String reportDate) {
+        this.reportDate = reportDate;
+    }
+
+    public String getReportDate() {
+        return reportDate;
+    }
+
+    public double getTotalAmtReport() {
+        return totalAmt;
+    }
+
+    public void setTotalAmtReport(double totalAmt) {
+        this.totalAmt = totalAmt;
+    }
+
+
+    public String getRegisterId() {
+        return registerId;
+    }
+
+    public void setRegisterId(String registerId) {
+        this.registerId = registerId;
     }
 
     public SalesTransaction getRecord(String id) {

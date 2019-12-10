@@ -17,7 +17,7 @@ public abstract class AbstractTransaction implements Transaction {
     protected Register register;
     protected double totalAmtBeforeTax;
     protected double totalTaxAmt;
-    protected Date transactionTime;
+    protected String transactionTime;
     protected SalesRepo salesRepo;
     private String id;
 
@@ -28,7 +28,7 @@ public abstract class AbstractTransaction implements Transaction {
         this.cashier = new User(cashierId);
         this.shift = shift;
         this.register = new Register(registerId);
-        transactionTime = Date.from(ZonedDateTime.now().toInstant());
+        transactionTime = ZonedDateTime.now().toString();
     }
 
     public void setId(String id) {
@@ -41,7 +41,7 @@ public abstract class AbstractTransaction implements Transaction {
         return id;
     }
 
-    public Date getTransactionTime() {
+    public String getTransactionTime() {
         return transactionTime;
     }
 

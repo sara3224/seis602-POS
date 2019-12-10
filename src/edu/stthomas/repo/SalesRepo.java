@@ -1,5 +1,6 @@
 package edu.stthomas.repo;
 
+import edu.stthomas.enums.Shift;
 import edu.stthomas.model.Item;
 import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
@@ -11,8 +12,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +100,46 @@ public class SalesRepo {
 
     public static Collection<SalesTransaction> getSales() {
         return sales.values();
+    }
+
+    public static Collection<SalesTransaction> getSalesForReportX(String cashierId, Shift shift, String reportDate) {
+        List<SalesTransaction> salesTransactions = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(salesFile))) {
+            String str;
+            SalesTransaction salesTransaction = new SalesTransaction();
+            DateFormat dateFormat =  DateFormat.getDateInstance();
+            while ((str = br.readLine()) != null) { //loop until end of file.
+                String[] line = str.split("\t");
+                //id0	cashier1	shift2	level3	register4	totalAmtBeforeTax5	totalTaxAmt6	totalAmt7	transactionTime8
+                if (line.length>3 && Objects.equals(line[1], cashierId) && Objects.equals(shift.name(), line[2])) {
+                    ZonedDateTime saleDate = ZonedDateTime.parse(line[8]);
+                    if(isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
+                        salesTransaction = new SalesTransaction();
+                        salesTransaction.setRegisterId(line[4]);
+                        salesTransaction.setTotalAmtReport(Double.valueOf(line[7]));
+                        salesTransaction.setReportDate(line[8]);
+                        salesTransactions.add(salesTransaction);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return salesTransactions;
+    }
+
+
+    private static boolean isSameDay(Date reportDate2, Date salesDate) {
+        Calendar requestedDate = Calendar.getInstance();
+        requestedDate.setTime(reportDate2);
+
+        Calendar salesRecordCal = Calendar.getInstance();
+        salesRecordCal.setTime(salesDate);
+
+        return requestedDate.get(Calendar.DAY_OF_YEAR) == salesRecordCal.get(Calendar.DAY_OF_YEAR) &&
+                requestedDate.get(Calendar.YEAR) == salesRecordCal.get(Calendar.YEAR);
     }
 
     /**

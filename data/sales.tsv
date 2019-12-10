@@ -1,4 +1,2 @@
-id	cahier	shift	level	register	totalAmtBeforeTax	totalTaxAmt	totalAmt	transactionTime
-
-e6cd6882	sara3224	NIGHT	1	1	7250.0	657.51	7907.51	Sun Dec 08 23:06:36 CST 2019
-9ceb6bee	sara3224	DAY	1	1	25.0	1.76	26.76	Sun Dec 08 23:21:53 CST 2019
+id	cashier	shift	level	register	totalAmtBeforeTax	totalTaxAmt	totalAmt	transactionTime
+c5931582	sara3224	NIGHT	1	1	250.0	17.5	267.5	2019-12-09T18:51:06.408-06:00[America/Chicago]

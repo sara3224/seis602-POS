@@ -7,6 +7,7 @@ import edu.stthomas.repo.InventoryRepo;
 import edu.stthomas.repo.SalesRepo;
 import edu.stthomas.service.PointOfReturn;
 import edu.stthomas.service.PointOfSale;
+import edu.stthomas.service.ReportingService;
 import edu.stthomas.service.User;
 
 import java.util.Objects;
@@ -71,8 +72,7 @@ public class Client {
                     PointOfSale pos = new PointOfSale(user.getId(), shift,registerId);//TODO: remove comment
 //                    PointOfSale pos = new PointOfSale("sara3224", Shift.NIGHT,1);
                     String next = null;
-//                    while(!"X".equals(next)) {
-                    while(!Objects.equals("X",next)) {
+                    while(!Objects.equals("X", next)) {
                         String itemAdded = pos.addItem((getInt("enter item id")), getInt("enter quantity"));
                         if(!itemAdded.equals("")) {
                             System.out.println(itemAdded);
@@ -124,7 +124,14 @@ public class Client {
                     }
 //                    System.out.println("Thanks..cancellation is done..");
                     break;
-                    //TODO check if sales id exist
+                case "21":
+                    System.out.println("Welcome to report X...");
+                    String cashierid = getString("Enter Cashier id");
+                    String shift = getString("Enter shift day or night");
+                    String reportDate = getString("Enter date in 'YYYY-MM-DD' format");
+                    ReportingService reportingService = new ReportingService();
+                    reportingService.reportX(cashierid,Shift.valueOf(shift.toUpperCase()),reportDate);
+                    break;
                 case "X":
                     System.out.println("Good bye!");
                     System.exit(0);
@@ -134,7 +141,7 @@ public class Client {
                     break;
             }
         }catch (Exception e) {
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
         }
         System.out.println("");
         //repeat until option X is selected
@@ -224,6 +231,8 @@ public class Client {
         stringBuilder.append("2\tInventory -- delete item \n");
         stringBuilder.append("11\tPOS -- new sale\n");
         stringBuilder.append("12\tPOS -- returns\n");
+        stringBuilder.append("21\tPOS -- report X. sales for a cashier with a shift and day\n");
+        stringBuilder.append("31\tPOS -- report Z. sales for a shift and day\n");
         stringBuilder.append("X\tTo Exit the Application\n");
 
         return stringBuilder.toString();

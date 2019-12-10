@@ -1,4 +1,2 @@
 saleid	lineItemId	itemId	qty	price	tax	lineitemamtBeforeTax	lineItemTax	totallineitem
-e6cd6882	1	90	25.0	0.07	2250.0	157.51	2407.51
-e6cd6882	2	5	1000.0	0.1	5000.0	500.0	5500.0
-9ceb6bee	1	1	25.0	0.07	25.0	1.76	26.76
+c5931582	1	10	25.0	0.07	250.0	17.5	267.5
