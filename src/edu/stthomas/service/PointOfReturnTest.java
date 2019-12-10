@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class PointOfReturnTest {
-
     @Test
     void cancelAll() throws  POSException{
         PointOfReturn pointOfReturn = new PointOfReturn("c5931582","1001", Shift.DAY,1,"");

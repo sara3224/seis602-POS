@@ -19,7 +19,6 @@ public class Client {
     Shift shift; //TODO: Change to String
 
     static Scanner myObj = new Scanner(System.in);
-
     public void login() {
         System.out.println("Welcome to SEIS 602 POS System!!!. Please enter credentials to get started....");
         String userId = getString("UserId:");
@@ -132,6 +131,13 @@ public class Client {
                     ReportingService reportingService = new ReportingService();
                     reportingService.reportX(cashierid,Shift.valueOf(shift.toUpperCase()),reportDate);
                     break;
+                case "22":
+                    System.out.println("Welcome to report Z...");
+                    shift = getString("Enter shift day or night");
+                    reportDate = getString("Enter date in 'YYYY-MM-DD' format");
+                    reportingService = new ReportingService();
+                    reportingService.reportZ(Shift.valueOf(shift.toUpperCase()),reportDate);
+                    break;
                 case "X":
                     System.out.println("Good bye!");
                     System.exit(0);
@@ -232,7 +238,7 @@ public class Client {
         stringBuilder.append("11\tPOS -- new sale\n");
         stringBuilder.append("12\tPOS -- returns\n");
         stringBuilder.append("21\tPOS -- report X. sales for a cashier with a shift and day\n");
-        stringBuilder.append("31\tPOS -- report Z. sales for a shift and day\n");
+        stringBuilder.append("22\tPOS -- report Z. sales for a shift and day\n");
         stringBuilder.append("X\tTo Exit the Application\n");
 
         return stringBuilder.toString();

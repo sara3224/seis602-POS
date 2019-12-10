@@ -2,6 +2,7 @@ package edu.stthomas.model;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.repo.SalesRepo;
+import edu.stthomas.service.User;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,10 @@ public class SalesTransaction extends AbstractTransaction {
             totalAmtBeforeTax += salesLineItem.getLineItemAmtBeforeTax();
             totalTaxAmt += salesLineItem.getLineItemTax();
         }
+    }
+
+    public void setCashier(String id) {
+         this.cashier = new User(id);
     }
 
     public SalesTransaction(List<SalesLineItem> salesItems, String cashierId, Shift shift, int registerId ) {

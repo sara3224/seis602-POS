@@ -38,16 +38,16 @@ public class PointOfReturn extends AbstractPointOfAction {
     //call the pricing service to get cost of each item and calculate total
     //return details of refund with item, qty for line item and total refund amt
     public ReturnTransaction complete() throws POSException  {
-          returnRecord = new ReturnTransaction(itemsAndQuantity, saleId, cashierId, shift, registerId, reason);
+        returnRecord = new ReturnTransaction(itemsAndQuantity, saleId, cashierId, shift, registerId, reason);
           //validate if returns are less than sales items count.
-            SalesTransaction salesRecord = SalesRepo.getSalesRecordForReturns(saleId);
+        SalesTransaction salesRecord = SalesRepo.getSalesRecordForReturns(saleId);
 
         for (ReturnLineItem returnLineItem: returnRecord.getReturnLineItems()) {
             SalesLineItem salesLineItem = salesRecord.getSalesLineItems().stream().filter(it->it.getItemId() == returnLineItem.getItemId()).findFirst().get();
             if(salesLineItem == null) {
                 throw new POSException("item-"+returnLineItem.getItemId() +" is not item of sales id: "+saleId);
             }
-            //TODO: total return quanity should be aggregated by sales id for each returned item
+            //TODO: total return quantity should be aggregated by sales id for each returned item
             if(returnLineItem.getQuantity() > salesLineItem.getQuantity()) {
                 throw new POSException("item-"+returnLineItem.getItemId()+" quantity "+returnLineItem.getQuantity()+
                         " is higher than sales quantity "+salesLineItem.getQuantity()+ " please re-enter transaction.");

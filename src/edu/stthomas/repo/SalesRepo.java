@@ -107,7 +107,6 @@ public class SalesRepo {
         try (BufferedReader br = new BufferedReader(new FileReader(salesFile))) {
             String str;
             SalesTransaction salesTransaction = new SalesTransaction();
-            DateFormat dateFormat =  DateFormat.getDateInstance();
             while ((str = br.readLine()) != null) { //loop until end of file.
                 String[] line = str.split("\t");
                 //id0	cashier1	shift2	level3	register4	totalAmtBeforeTax5	totalTaxAmt6	totalAmt7	transactionTime8
@@ -115,6 +114,34 @@ public class SalesRepo {
                     ZonedDateTime saleDate = ZonedDateTime.parse(line[8]);
                     if(isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
                         salesTransaction = new SalesTransaction();
+                        salesTransaction.setRegisterId(line[4]);
+                        salesTransaction.setTotalAmtReport(Double.valueOf(line[7]));
+                        salesTransaction.setReportDate(line[8]);
+                        salesTransactions.add(salesTransaction);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return salesTransactions;
+    }
+
+    public static Collection<SalesTransaction> getSalesForReportZ(Shift shift, String reportDate) {
+        List<SalesTransaction> salesTransactions = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(salesFile))) {
+            String str;
+            SalesTransaction salesTransaction = new SalesTransaction();
+            while ((str = br.readLine()) != null) { //loop until end of file.
+                String[] line = str.split("\t");
+                //id0	cashier1	shift2	level3	register4	totalAmtBeforeTax5	totalTaxAmt6	totalAmt7	transactionTime8
+                if (line.length>3 && Objects.equals(shift.name(), line[2])) {
+                    ZonedDateTime saleDate = ZonedDateTime.parse(line[8]);
+                    if(isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
+                        salesTransaction = new SalesTransaction();
+                        salesTransaction.setCashier(line[1]);
                         salesTransaction.setRegisterId(line[4]);
                         salesTransaction.setTotalAmtReport(Double.valueOf(line[7]));
                         salesTransaction.setReportDate(line[8]);
