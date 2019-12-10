@@ -19,6 +19,7 @@ public class PointOfSaleTest {
 	    assertEquals(b,3);
 	}
 
+	
 	@Test
 	public void test2() {
 		PointOfSale pos = new PointOfSale("1001", Shift.DAY, 1);

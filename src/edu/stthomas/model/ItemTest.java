@@ -2,11 +2,10 @@ package edu.stthomas.model;
 
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ItemTest {
-	Item item = new Item(1,"apple",10,0.01,0.5,20,100,50,0);
+	Item item = new Item(1,"apple",10,1.00,0.05,20,100,50,0);
 	
 
 	@Test
@@ -15,44 +14,52 @@ public class ItemTest {
 		assertEquals(a,1);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetName() {
-		fail("Not yet implemented");
+		String a=item.getName();
+		assertEquals(a,"apple");
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetOnhands() {
-		fail("Not yet implemented");
+		int a=item.getOnhands();
+		assertEquals(a,10);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetPrice() {
-		fail("Not yet implemented");
+		double a=item.getPrice();
+		assertEquals(a,1.00,0.01);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetTax() {
-		fail("Not yet implemented");
+		double a=item.getTax();
+		assertEquals(a,0.05,0.01);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetThreshold() {
-		fail("Not yet implemented");
+		int a=item.getThreshold();
+		assertEquals(a,20);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetSupplierId() {
-		fail("Not yet implemented");
+		int a=item.getSupplierId();
+		assertEquals(a,100);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetReorderQty() {
-		fail("Not yet implemented");
+		int a=item.getReorderQty();
+		assertEquals(a,50);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testGetPending() {
-		fail("Not yet implemented");
+		int a=item.getPending();
+		assertEquals(a,0);
 	}
 
 }
