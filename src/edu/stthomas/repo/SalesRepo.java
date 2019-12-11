@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
@@ -30,8 +29,6 @@ import java.util.UUID;
  * manage sales transactions
  */
 public class SalesRepo {
-    //TODO: report x
-    //TODO report y
     public static final Map<String, SalesTransaction> sales = new HashMap<>();
     private static File salesFile = new File("./data/" + "sales.tsv");
     private static File salesItemsFile = new File("./data/" + "salesLineItems.tsv");

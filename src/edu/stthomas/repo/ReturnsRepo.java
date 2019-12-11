@@ -17,14 +17,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-//TODO; write to returns and returns line items file..cannot have more items returned than purchased.
 public class ReturnsRepo {
     //this would be in file or database
     public static final Map<String, ReturnTransaction> returns = new HashMap<>();
     private static File returnsFile = new File("./data/" + "returns.tsv");
     private static File returnsItemsFile = new File("./data/" + "returnsLineItems.tsv");
 
-    //TODO: check if inventory is added back and also not over returns
     public String save(ReturnTransaction returnRecord) {
         String returnId =  UUID.randomUUID().toString().substring(0,8);
         returnRecord.setId(returnId);
@@ -33,26 +31,6 @@ public class ReturnsRepo {
         updateInventory(returnRecord);
         return returnId;
     }
-
-//    public static List<ReturnLineItem> getReturnRecordForReturns(String salesId) {
-//            List<ReturnLineItem> returnLineItems = new ArrayList<>();
-//            try {
-//                try (BufferedReader br = new BufferedReader(new FileReader(returnsItemsFile))) {
-//                    String str;
-//                    while ((str = br.readLine()) != null) { //loop until end of file.
-//                        String[] line = str.split("\t");
-//                        if (Objects.equals(line[0], salesId)) {
-//                            returnLineItems.add(new ReturnLineItem(salesId, Integer.valueOf(line[2]), Integer.valueOf(line[3])));
-//                        }
-//                    }
-//                }
-//            } catch (FileNotFoundException e) {
-//                System.out.println("File not found" + e);
-//            } catch (IOException e) {
-//                System.out.println("File not found" + e);
-//            }
-//        return returnLineItems;
-//    }
 
 
     public static Map<String,Integer> getReturnRecordForReturns(String salesId) {

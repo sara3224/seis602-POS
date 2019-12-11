@@ -16,7 +16,6 @@ import java.util.Scanner;
 
 //TODO: remove item and then return happens
 //TODO: tax should be multiplied by 100 when displayed
-//TODO: level based display... level 2 shows report x and y options
 public class Client {
     User user; //TODO level 1 can only do 11 i.e POS and returns. rest all i.e add inventory, remove and report level 2
     String registerId; //TODO: change to string
@@ -66,7 +65,6 @@ public class Client {
         return input;
     }
 
-    //TODO: report X and report Y by one level 2
     public void start() {
         System.out.println(initialScreen());
         try {
@@ -83,8 +81,7 @@ public class Client {
                     break;
                 case "11": //POS
                     System.out.println("Enter items and quantity");
-                    PointOfSale pos = new PointOfSale(user.getId(), shift, registerId);//TODO: remove comment
-//                    PointOfSale pos = new PointOfSale("sara3224", Shift.NIGHT,1);
+                    PointOfSale pos = new PointOfSale(user.getId(), shift, registerId);
                     String next = null;
                     while(!Objects.equals("X", next)) {
                         String itemAdded = pos.addItem((getString("enter item id")), getInt("enter quantity"));
@@ -239,7 +236,6 @@ public class Client {
         return dbl;
     }
 
-//    private static String initialScreen() {
     private String initialScreen() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Please select one of the following options\n");
@@ -250,7 +246,6 @@ public class Client {
             stringBuilder.append("21\tPOS -- returns..cancel all sales\n");
             stringBuilder.append("22\tPOS -- return..individual items\n");
         } else if (user.getLevel() == 2) {
-            ////TODO: only level 2 or higher can run report X and Z
             stringBuilder.append("31\tPOS -- report X. sales for a cashier with a shift and day\n");
             stringBuilder.append("32\tPOS -- report Z. sales for a shift and day\n");
         }

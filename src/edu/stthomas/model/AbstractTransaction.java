@@ -7,7 +7,6 @@ import edu.stthomas.service.User;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractTransaction implements Transaction {

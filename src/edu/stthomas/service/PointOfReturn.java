@@ -5,7 +5,6 @@ import edu.stthomas.exceptions.POSException;
 import edu.stthomas.model.AbstractLineItem;
 import edu.stthomas.model.ReturnLineItem;
 import edu.stthomas.model.ReturnTransaction;
-import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
 import edu.stthomas.repo.ReturnsRepo;
 import edu.stthomas.repo.SalesRepo;
@@ -43,7 +42,6 @@ public class PointOfReturn extends AbstractPointOfAction {
     //call the pricing service to get cost of each item and calculate total
     //return details of refund with item, qty for line item and total refund amt
     public ReturnTransaction complete() throws POSException  {
-//        returnRecord = new ReturnTransaction(getItemsAndQuantity(), saleId, cashierId, shift, registerId, reason);
         returnRecord = new ReturnTransaction(saleId, cashierId, shift, registerId, reason);
         returnRecord.calculateReturnDetails(getItemsAndQuantity());
           //validate if returns are less than sales items count.
@@ -52,7 +50,6 @@ public class PointOfReturn extends AbstractPointOfAction {
 
         for (ReturnLineItem returnLineItem:  returnRecord.getReturnLineItems()) {
             //get the corresponding sales line item
-            //TODO: validate this scenario where return item is not in sales record.
             boolean salesHappenedForReturningItem = salesRecord.getSalesLineItems().stream().filter(it->it.getItemId().equals(returnLineItem.getItemId())).count() >= 1;
             if(!salesHappenedForReturningItem ) {
                 throw new POSException("item-"+returnLineItem.getItemId() +" is not item of sales id: "+saleId);
@@ -90,7 +87,6 @@ public class PointOfReturn extends AbstractPointOfAction {
         return "";
     }
 
-    //TODO POS and returns print should be similar to actual receipts i.e headers and than line items
     @Override
     public void recordPrint() {
         System.out.println("return for sales id: " + returnRecord.getSalesId() + " cashier id: "
