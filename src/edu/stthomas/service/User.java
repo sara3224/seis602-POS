@@ -21,6 +21,11 @@ public class User {
         cashierLevels.put("alinaqvi",2);
     }
 
+    public User()
+    {
+    	
+    }
+    
     public User(String id) {
         this.id = id;
     }
@@ -36,8 +41,19 @@ public class User {
     public String getId() {
         return id;
     }
+    
+    public void setId(String user)
+    {
+    	id = user;
+    }
 
     public int getLevel() {
         return cashierLevels.get(getId());
     }
+    
+    public HashMap<String, String> getUsers()
+    {
+    	return users;
+    }
+   
 }

@@ -1,6 +1,7 @@
 package edu.stthomas;
 
 import edu.stthomas.client.Client;
+import edu.stthomas.client.Client3;
 import edu.stthomas.enums.Shift;
 import edu.stthomas.model.ReturnLineItem;
 import edu.stthomas.model.ReturnTransaction;
@@ -66,9 +67,14 @@ public class Main {
 //        por2.cancelAll();
 //        por2.complete();
 //        generateReturnReport();
-        Client client = new Client();
-        client.login();
+//       Client client = new Client();
+//        client.login();
 //        Client.start();
+        
+        Client3 client3 = new Client3();
+        client3.login();
+        
+		
     }
 
     private static void generateReturnReport() {
