@@ -4,13 +4,17 @@ import edu.stthomas.model.Item;
 import edu.stthomas.model.ReturnLineItem;
 import edu.stthomas.model.ReturnTransaction;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 //TODO; write to returns and returns line items file..cannot have more items returned than purchased.
@@ -30,6 +34,52 @@ public class ReturnsRepo {
         return returnId;
     }
 
+//    public static List<ReturnLineItem> getReturnRecordForReturns(String salesId) {
+//            List<ReturnLineItem> returnLineItems = new ArrayList<>();
+//            try {
+//                try (BufferedReader br = new BufferedReader(new FileReader(returnsItemsFile))) {
+//                    String str;
+//                    while ((str = br.readLine()) != null) { //loop until end of file.
+//                        String[] line = str.split("\t");
+//                        if (Objects.equals(line[0], salesId)) {
+//                            returnLineItems.add(new ReturnLineItem(salesId, Integer.valueOf(line[2]), Integer.valueOf(line[3])));
+//                        }
+//                    }
+//                }
+//            } catch (FileNotFoundException e) {
+//                System.out.println("File not found" + e);
+//            } catch (IOException e) {
+//                System.out.println("File not found" + e);
+//            }
+//        return returnLineItems;
+//    }
+
+
+    public static Map<Integer,Integer> getReturnRecordForReturns(String salesId) {
+        Map<Integer, Integer> returnItemQty = new HashMap<>();
+        try {
+            try (BufferedReader br = new BufferedReader(new FileReader(returnsItemsFile))) {
+                String str;
+                while ((str = br.readLine()) != null) { //loop until end of file.
+                    String[] line = str.split("\t");
+                    if (Objects.equals(line[0], salesId)) {
+                        int itemId = Integer.parseInt(line[2]);
+                        int qty = Integer.parseInt(line[3]);
+                        if(returnItemQty.containsKey(itemId)) {
+                            qty += returnItemQty.get(itemId);
+                        }
+                        returnItemQty.put( itemId, qty);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found" + e);
+        } catch (IOException e) {
+            System.out.println("File not found" + e);
+        }
+        return returnItemQty;
+    }
+
     private void record(ReturnTransaction returnRecord) {
             String returnsSave = returnRecord.getSalesId() + "\t" + returnRecord.getId() + "\t" +returnRecord.getCashier().getId() + "\t"
                     +returnRecord.getShift() + "\t" +returnRecord.getCashier().getLevel()+ "\t"
@@ -46,7 +96,7 @@ public class ReturnsRepo {
         StringBuilder lineItemsDetails = new StringBuilder();
         List<ReturnLineItem> returnsLineItems = returnRecord.getReturnLineItems();
         for(ReturnLineItem lineItem: returnsLineItems) {
-            lineItemsDetails.append(returnRecord.getId() + "\t" + lineItem.getItemId() + "\t" + lineItem.getQuantity() + "\t" +lineItem.getPrice()
+            lineItemsDetails.append(returnRecord.getSalesId() + "\t" +returnRecord.getId() + "\t" + lineItem.getItemId() + "\t" + lineItem.getQuantity() + "\t" +lineItem.getPrice()
                     +"\t" +lineItem.getTax() + "\t" +lineItem.getLineItemAmtBeforeTax() + "\t" +lineItem.getLineItemTax()
                     + "\t" + lineItem.getLineItemAmt() + "\n");
         }

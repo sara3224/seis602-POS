@@ -43,7 +43,7 @@ public class PointOfSale extends AbstractPointOfAction {
             }
         }
         salesRecord = new SalesTransaction(itemsAndQuantity, cashierId, shift, registerId);
-        String saleId = salesRecord.save(salesRecord);
+        saleId = salesRecord.save(salesRecord);
         salesRecord =  salesRecord.getRecord(saleId);
         recordPrint();
         return salesRecord;

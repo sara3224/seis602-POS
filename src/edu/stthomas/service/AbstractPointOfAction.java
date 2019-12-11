@@ -23,6 +23,10 @@ public abstract class AbstractPointOfAction implements IPointOfAction {
         this.registerId = registerId;
     }
 
+    public String getSaleId() {
+        return saleId;
+    }
+
     /**
      * Overrides the quantity for item.
      * @param item_id

@@ -8,6 +8,8 @@ public class AbstractLineItem implements LineItem {
     protected double price;
     protected double tax;
 
+    public AbstractLineItem() {}
+
     public AbstractLineItem(int quantity) {
         this.quantity = quantity;
     }

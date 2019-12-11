@@ -16,6 +16,10 @@ public class ReturnTransaction extends AbstractTransaction {
     private String reason;
     private String salesId;
 
+    public ReturnTransaction() {
+
+    }
+
     public ReturnTransaction(Map<Integer, Integer> itemsAndQuantity, String saleId, String cashierId, Shift shift, int registerId, String reason) {
         super(cashierId,shift,registerId);
         returnsRepo = new ReturnsRepo();

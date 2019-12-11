@@ -90,40 +90,79 @@ public class Client {
                     }
                     System.out.println("Thanks..transaction is done..");
                     break;
-                case "12": //POS returns
+                case "21": //POS returns all sales
 //                    String returnsalesId = getString("Enter salesId");
-                    String nextInput = null;
-                    while(!Objects.equals("X",nextInput)) {
-//                        System.out.println("Enter sales Id:");
-                        String salesId = getString("Enter sales Id:");
-                        SalesTransaction salesTransaction = SalesRepo.getSalesRecordForReturns(salesId);
-                        if(salesTransaction.getSalesLineItems().size() == 0) {
-                            System.out.println("salesId: "+salesId +" does not exists, please enter a valid sales id for returning items");
-                            break;
-                        }
-                        System.out.println("press X to cancel all sales or C to return an item for sales");
-//                        System.out.println("press X to finalize POS or C to enter next item id");
-                        nextInput = myObj.next();
-                        PointOfReturn pointOfReturn = new PointOfReturn(nextInput, user.getId(), shift, registerId,"");//TODO uncomment
-//                        PointOfReturn pointOfReturn = new PointOfReturn(salesId,"1001", Shift.DAY,1,"");
-                        if ("X".equals(nextInput)) {
-                            try {
-                                pointOfReturn.cancelAll();
-                                pointOfReturn.complete();
-                            } catch (POSException e) {
-                                System.out.println(e.getMessage());
-                                break;
-                            }
-                        } else {
-                            pointOfReturn.addItem((getInt("enter item id")), getInt("enter quantity"));
-                            pointOfReturn.complete();
-                            System.out.println("Thanks..cancellation is done..");
-                            break;
-                        }
+                    String salesId = getString("Enter sales Id:");
+                    SalesTransaction salesTransaction = SalesRepo.getSalesRecordForReturns(salesId);
+                    if(salesTransaction.getSalesLineItems().size() == 0) {
+                        System.out.println("salesId: "+salesId +" does not exists, please enter a valid sales id for returning items");
+                        break;
                     }
+                    try {
+                        PointOfReturn pointOfReturn = new PointOfReturn(salesId, user.getId(), shift, registerId,"");//TODO uncomment
+                        pointOfReturn.cancelAll();
+                        pointOfReturn.complete();
+                    } catch (POSException e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+
+//                    while(!Objects.equals("X",nextInput)) {
+////                        System.out.println("Enter sales Id:");
+//
+//
+//                        salesTransaction = SalesRepo.getSalesRecordForReturns(salesId);
+//                        if(salesTransaction.getSalesLineItems().size() == 0) {
+//                            System.out.println("salesId: "+salesId +" does not exists, please enter a valid sales id for returning items");
+//                            break;
+//                        }
+//                        System.out.println("press X to cancel all sales or C to return an item for sales");
+////                        System.out.println("press X to finalize POS or C to enter next item id");
+//                        nextInput = myObj.next();
+//                        PointOfReturn pointOfReturn = new PointOfReturn(nextInput, user.getId(), shift, registerId,"");//TODO uncomment
+////                        PointOfReturn pointOfReturn = new PointOfReturn(salesId,"1001", Shift.DAY,1,"");
+//                        if ("X".equals(nextInput)) {
+//                            try {
+//                                pointOfReturn.cancelAll();
+//                                pointOfReturn.complete();
+//                            } catch (POSException e) {
+//                                System.out.println(e.getMessage());
+//                                break;
+//                            }
+//                        } else {
+//                            pointOfReturn.addItem((getInt("enter item id")), getInt("enter quantity"));
+//                            pointOfReturn.complete();
+//                            System.out.println("Thanks..cancellation is done..");
+//                            break;
+//                        }
+//                    }
 //                    System.out.println("Thanks..cancellation is done..");
                     break;
-                case "21":
+                case "22":
+                    salesId = getString("Enter sales Id:");
+                    salesTransaction = SalesRepo.getSalesRecordForReturns(salesId);
+                    if(salesTransaction.getSalesLineItems().size() == 0) {
+                        System.out.println("salesId: "+salesId +" does not exists, please enter a valid sales id for returning items");
+                        break;
+                    }
+                    PointOfReturn pointOfReturn = new PointOfReturn(salesId, user.getId(), shift, registerId,"");
+                    next = null;
+                    while(!Objects.equals("X", next)) {
+                        pointOfReturn.addItem((getInt("enter item id")), getInt("enter quantity"));
+                            System.out.println("press X to finalize return or C to enter next return item id");
+                            next = myObj.next();
+                            if (Objects.equals("X",next)) {
+                                try {
+                                    pointOfReturn.complete();
+                                } catch (POSException e) {
+                                    System.out.println(e.getMessage());
+                                    break;
+                                }
+                        }
+                    }
+                    System.out.println("Thanks..return transaction is done..");
+                    break;
+                case "31":
                     System.out.println("Welcome to report X...");
                     String cashierid = getString("Enter Cashier id");
                     String shift = getString("Enter shift day or night");
@@ -131,7 +170,7 @@ public class Client {
                     ReportingService reportingService = new ReportingService();
                     reportingService.reportX(cashierid,Shift.valueOf(shift.toUpperCase()),reportDate);
                     break;
-                case "22":
+                case "32":
                     System.out.println("Welcome to report Z...");
                     shift = getString("Enter shift day or night");
                     reportDate = getString("Enter date in 'YYYY-MM-DD' format");
@@ -236,9 +275,11 @@ public class Client {
         stringBuilder.append("1\tInventory -- add item \n");
         stringBuilder.append("2\tInventory -- delete item \n");
         stringBuilder.append("11\tPOS -- new sale\n");
-        stringBuilder.append("12\tPOS -- returns\n");
-        stringBuilder.append("21\tPOS -- report X. sales for a cashier with a shift and day\n");
-        stringBuilder.append("22\tPOS -- report Z. sales for a shift and day\n");
+        stringBuilder.append("21\tPOS -- returns..cancel all sales\n");
+        stringBuilder.append("22\tPOS -- return..individual items\n");
+        ////TODO: only level 2 or higher can run report X and Z
+        stringBuilder.append("31\tPOS -- report X. sales for a cashier with a shift and day\n");
+        stringBuilder.append("32\tPOS -- report Z. sales for a shift and day\n");
         stringBuilder.append("X\tTo Exit the Application\n");
 
         return stringBuilder.toString();
