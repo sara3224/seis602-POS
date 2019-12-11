@@ -2,6 +2,7 @@ package edu.stthomas.client;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.exceptions.POSException;
+import edu.stthomas.model.Register;
 import edu.stthomas.model.SalesTransaction;
 import edu.stthomas.repo.InventoryRepo;
 import edu.stthomas.repo.SalesRepo;
@@ -12,10 +13,13 @@ import edu.stthomas.service.User;
 
 import java.util.Objects;
 import java.util.Scanner;
-//TODO: support return with sales id and items
+
+//TODO: remove item and then return happens
+//TODO: tax should be multiplied by 100 when displayed
+//TODO: level based display... level 2 shows report x and y options
 public class Client {
     User user; //TODO level 1 can only do 11 i.e POS and returns. rest all i.e add inventory, remove and report level 2
-    Integer registerId; //TODO: change to string
+    String registerId; //TODO: change to string
     Shift shift; //TODO: Change to String
 
     static Scanner myObj = new Scanner(System.in);
@@ -34,45 +38,56 @@ public class Client {
     }
 
     private void register() {
-        try {
-            registerId = getInt("Enter register");
-            shift();
-        } catch (Exception e) {
-            System.out.println("Enter number for register id");
+        registerId = getString("Please enter register in range of 1 to 10");
+        if(!Register.registers.contains(registerId)) {
+            register();
         }
+        shift();
     }
 
     private void shift() {
-        try {
-            shift = Shift.valueOf(getString("Enter shift").toUpperCase());
-            start();
-        } catch(Exception e){
-            System.out.println("Enter either day or night for shift");
+        String inputShift = getString("Enter shift....day or night");
+        if(inputShift.equalsIgnoreCase("day") || inputShift.equalsIgnoreCase("night")) {
+            shift = Shift.valueOf(inputShift.toUpperCase());
+        } else {
+            shift();
         }
+        start();
+    }
+
+    private int getInt(String desc) {
+        System.out.println(desc);
+        int input = 0;
+        try {
+            input = myObj.nextInt();
+        }catch (Exception e) {
+            throw new NumberFormatException("input should be a number");
+        }
+        return input;
     }
 
     //TODO: report X and report Y by one level 2
     public void start() {
         System.out.println(initialScreen());
         try {
-            String choice = myObj.nextLine();  // Read user input
+            String choice = myObj.next();  // Read user input
             switch (choice) {
                 case "1":
                     System.out.println("Add Item");
-                    InventoryRepo.addItem(getInt("enter item Id:"),getString("enter item description"), getPositiveInt("enter on hands quantity"),getPositiveDouble("enter price"),
-                            getPositiveDouble("enter tax percentage"), getPositiveInt("enter threshold"), getInt("enter supplier id"), getPositiveInt("enter replenishment quantity"));
+                    InventoryRepo.addItem(getString("enter item Id"), getString("enter item description"), getPositiveInt("enter on hands quantity"),getPositiveDouble("enter price"),
+                            getPositiveDouble("enter tax percentage"), getPositiveInt("enter threshold"), getString("enter supplier id"), getPositiveInt("enter replenishment quantity"));
                     break;
                 case "2":
                     System.out.println("Delete Item");
-                    InventoryRepo.removeItem(getInt("enter item Id:"));
+                    InventoryRepo.removeItem(getString("enter item Id:"));
                     break;
                 case "11": //POS
                     System.out.println("Enter items and quantity");
-                    PointOfSale pos = new PointOfSale(user.getId(), shift,registerId);//TODO: remove comment
+                    PointOfSale pos = new PointOfSale(user.getId(), shift, registerId);//TODO: remove comment
 //                    PointOfSale pos = new PointOfSale("sara3224", Shift.NIGHT,1);
                     String next = null;
                     while(!Objects.equals("X", next)) {
-                        String itemAdded = pos.addItem((getInt("enter item id")), getInt("enter quantity"));
+                        String itemAdded = pos.addItem((getString("enter item id")), getInt("enter quantity"));
                         if(!itemAdded.equals("")) {
                             System.out.println(itemAdded);
                         } else {
@@ -91,7 +106,6 @@ public class Client {
                     System.out.println("Thanks..transaction is done..");
                     break;
                 case "21": //POS returns all sales
-//                    String returnsalesId = getString("Enter salesId");
                     String salesId = getString("Enter sales Id:");
                     SalesTransaction salesTransaction = SalesRepo.getSalesRecordForReturns(salesId);
                     if(salesTransaction.getSalesLineItems().size() == 0) {
@@ -106,37 +120,6 @@ public class Client {
                         System.out.println(e.getMessage());
                         break;
                     }
-
-//                    while(!Objects.equals("X",nextInput)) {
-////                        System.out.println("Enter sales Id:");
-//
-//
-//                        salesTransaction = SalesRepo.getSalesRecordForReturns(salesId);
-//                        if(salesTransaction.getSalesLineItems().size() == 0) {
-//                            System.out.println("salesId: "+salesId +" does not exists, please enter a valid sales id for returning items");
-//                            break;
-//                        }
-//                        System.out.println("press X to cancel all sales or C to return an item for sales");
-////                        System.out.println("press X to finalize POS or C to enter next item id");
-//                        nextInput = myObj.next();
-//                        PointOfReturn pointOfReturn = new PointOfReturn(nextInput, user.getId(), shift, registerId,"");//TODO uncomment
-////                        PointOfReturn pointOfReturn = new PointOfReturn(salesId,"1001", Shift.DAY,1,"");
-//                        if ("X".equals(nextInput)) {
-//                            try {
-//                                pointOfReturn.cancelAll();
-//                                pointOfReturn.complete();
-//                            } catch (POSException e) {
-//                                System.out.println(e.getMessage());
-//                                break;
-//                            }
-//                        } else {
-//                            pointOfReturn.addItem((getInt("enter item id")), getInt("enter quantity"));
-//                            pointOfReturn.complete();
-//                            System.out.println("Thanks..cancellation is done..");
-//                            break;
-//                        }
-//                    }
-//                    System.out.println("Thanks..cancellation is done..");
                     break;
                 case "22":
                     salesId = getString("Enter sales Id:");
@@ -146,12 +129,12 @@ public class Client {
                         break;
                     }
                     PointOfReturn pointOfReturn = new PointOfReturn(salesId, user.getId(), shift, registerId,"");
-                    next = null;
-                    while(!Objects.equals("X", next)) {
-                        pointOfReturn.addItem((getInt("enter item id")), getInt("enter quantity"));
+                    String nextR = null;
+                    while(!Objects.equals("X", nextR)) {
+                        pointOfReturn.addItem((getString("enter item id")), getInt("enter quantity"));
                             System.out.println("press X to finalize return or C to enter next return item id");
-                            next = myObj.next();
-                            if (Objects.equals("X",next)) {
+                            nextR = myObj.next();
+                            if (Objects.equals("X", nextR)) {
                                 try {
                                     pointOfReturn.complete();
                                 } catch (POSException e) {
@@ -182,7 +165,6 @@ public class Client {
                     System.exit(0);
                     break;
                 default:
-                    start();
                     break;
             }
         }catch (Exception e) {
@@ -207,19 +189,7 @@ public class Client {
         return input;
     }
 
-    /**
-     * @return
-     */
-    private static int getInt(String desc) {
-        System.out.println(desc);
-        int input = 0;
-        try {
-            input = myObj.nextInt();
-        }catch (Exception e) {
-            throw new NumberFormatException("input should be a number");
-        }
-        return input;
-    }
+
 
     /**
      * @return
@@ -269,17 +239,21 @@ public class Client {
         return dbl;
     }
 
-    private static String initialScreen() {
+//    private static String initialScreen() {
+    private String initialScreen() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Please select one of the following options\n");
-        stringBuilder.append("1\tInventory -- add item \n");
-        stringBuilder.append("2\tInventory -- delete item \n");
-        stringBuilder.append("11\tPOS -- new sale\n");
-        stringBuilder.append("21\tPOS -- returns..cancel all sales\n");
-        stringBuilder.append("22\tPOS -- return..individual items\n");
-        ////TODO: only level 2 or higher can run report X and Z
-        stringBuilder.append("31\tPOS -- report X. sales for a cashier with a shift and day\n");
-        stringBuilder.append("32\tPOS -- report Z. sales for a shift and day\n");
+        if(user.getLevel() == 1) {
+            stringBuilder.append("1\tInventory -- add item \n");
+            stringBuilder.append("2\tInventory -- delete item \n");
+            stringBuilder.append("11\tPOS -- new sale\n");
+            stringBuilder.append("21\tPOS -- returns..cancel all sales\n");
+            stringBuilder.append("22\tPOS -- return..individual items\n");
+        } else if (user.getLevel() == 2) {
+            ////TODO: only level 2 or higher can run report X and Z
+            stringBuilder.append("31\tPOS -- report X. sales for a cashier with a shift and day\n");
+            stringBuilder.append("32\tPOS -- report Z. sales for a shift and day\n");
+        }
         stringBuilder.append("X\tTo Exit the Application\n");
 
         return stringBuilder.toString();

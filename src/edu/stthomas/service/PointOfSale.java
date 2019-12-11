@@ -20,20 +20,20 @@ import java.util.Map;
  *
  */
 public class PointOfSale extends AbstractPointOfAction {
-    public PointOfSale(String cashierId, Shift shift, int registerId) {
+    public PointOfSale(String cashierId, Shift shift, String registerId) {
         super(cashierId, shift, registerId);
     }
 
     @Override
-    public Map<Integer, Integer> getItemsAndQuantity() {
+    public Map<String, Integer> getItemsAndQuantity() {
         return itemsAndQuantity;
     }
 
     //call the pricing service to get cost of each item and calculate total
     public SalesTransaction complete() throws POSException {
         //validate if items are still in inventory
-        for(Map.Entry<Integer,Integer> itemQty: getItemsAndQuantity().entrySet()) {
-            int itemId = itemQty.getKey();
+        for(Map.Entry<String,Integer> itemQty: getItemsAndQuantity().entrySet()) {
+            String itemId = itemQty.getKey();
             int qty = itemQty.getValue();
             Item item = InventoryRepo.getItem(itemId);
             if(item == null) {

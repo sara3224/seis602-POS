@@ -194,7 +194,7 @@ public class SalesRepo {
                     while ((str = br.readLine()) != null) { //loop until end of file.
                         String[] line = str.split("\t");
                         if (Objects.equals(line[0], salesId)) {
-                            salesLineItems.add(new SalesLineItem(Integer.valueOf(line[1]), Integer.valueOf(line[2]),Double.valueOf(line[3]), Double.valueOf(line[4])));
+                            salesLineItems.add(new SalesLineItem(line[1], Integer.valueOf(line[2]),Double.valueOf(line[3]), Double.valueOf(line[4])));
                         }
                     }
                 }

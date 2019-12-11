@@ -23,7 +23,7 @@ public abstract class AbstractTransaction implements Transaction {
 
     public AbstractTransaction(){};
 
-    public AbstractTransaction(String cashierId, Shift shift, int registerId) {
+    public AbstractTransaction(String cashierId, Shift shift, String registerId) {
         this.salesLineItems = new ArrayList<>();
         this.cashier = new User(cashierId);
         this.shift = shift;

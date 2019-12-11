@@ -3,7 +3,7 @@ package edu.stthomas.model;
 import edu.stthomas.helper.Helper;
 
 public class AbstractLineItem implements LineItem {
-    protected int itemId;
+    protected String itemId;
     protected int quantity;
     protected double price;
     protected double tax;
@@ -14,12 +14,12 @@ public class AbstractLineItem implements LineItem {
         this.quantity = quantity;
     }
 
-    public AbstractLineItem(int itemId, int quantity) {
+    public AbstractLineItem(String itemId, int quantity) {
         this.itemId = itemId;
         this.quantity = quantity;
     }
 
-    public int getItemId() {
+    public String getItemId() {
         return itemId;
     }
 

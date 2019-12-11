@@ -4,17 +4,17 @@ package edu.stthomas.model;
  * read inventory details from the file.
  */
 public class Item {
-    private int itemId;
+    private String itemId;
     private String name;
     private int onhands;
     private double price;
     private double tax;
     private int threshold;
-    private int supplierId;
+    private String supplierId;
     private int reorderQty;
     private int pending;
 
-    public Item(int itemId, String name, int onhands, double price, double tax, int threshold, int supplierId, int reorderQty, int pending) {
+    public Item(String itemId, String name, int onhands, double price, double tax, int threshold, String supplierId, int reorderQty, int pending) {
         this.itemId = itemId;
         this.name = name;
         this.onhands = onhands;
@@ -26,7 +26,7 @@ public class Item {
         this.pending = pending;
     }
 
-    public int getItemId() {
+    public String getItemId() {
         return itemId;
     }
 
@@ -50,7 +50,7 @@ public class Item {
         return threshold;
     }
 
-    public int getSupplierId() {
+    public String getSupplierId() {
         return supplierId;
     }
 

@@ -55,15 +55,15 @@ public class ReturnsRepo {
 //    }
 
 
-    public static Map<Integer,Integer> getReturnRecordForReturns(String salesId) {
-        Map<Integer, Integer> returnItemQty = new HashMap<>();
+    public static Map<String,Integer> getReturnRecordForReturns(String salesId) {
+        Map<String, Integer> returnItemQty = new HashMap<>();
         try {
             try (BufferedReader br = new BufferedReader(new FileReader(returnsItemsFile))) {
                 String str;
                 while ((str = br.readLine()) != null) { //loop until end of file.
                     String[] line = str.split("\t");
                     if (Objects.equals(line[0], salesId)) {
-                        int itemId = Integer.parseInt(line[2]);
+                        String itemId = line[2];
                         int qty = Integer.parseInt(line[3]);
                         if(returnItemQty.containsKey(itemId)) {
                             qty += returnItemQty.get(itemId);

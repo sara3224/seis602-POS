@@ -11,13 +11,13 @@ import java.util.Map;
 public abstract class AbstractPointOfAction implements IPointOfAction {
     protected String cashierId;
     protected Shift shift;
-    protected int registerId;
-    protected Map<Integer, Integer> itemsAndQuantity = new HashMap<>();
+    protected String registerId;
+    protected Map<String, Integer> itemsAndQuantity = new HashMap<>();
     protected String saleId;
     protected SalesTransaction salesRecord;
 
 
-    public AbstractPointOfAction(String cashierId, Shift shift, int registerId) {
+    public AbstractPointOfAction(String cashierId, Shift shift, String registerId) {
         this.cashierId = cashierId;
         this.shift = shift;
         this.registerId = registerId;
@@ -33,7 +33,7 @@ public abstract class AbstractPointOfAction implements IPointOfAction {
      * @param qty
      */
     @Override
-    public String addItem(Integer item_id, int qty) {
+    public String addItem(String item_id, int qty) {
         Item item = InventoryRepo.getItem(item_id);
         if(item == null) {
             return "Item: " +item_id+ " does not exist...Please enter valid item";
@@ -45,12 +45,12 @@ public abstract class AbstractPointOfAction implements IPointOfAction {
     }
 
     @Override
-    public Map<Integer, Integer> getItemsAndQuantity() {
+    public Map<String, Integer> getItemsAndQuantity() {
         return itemsAndQuantity;
     }
 
     @Override
-    public void removeItem(Integer item_id) {
+    public void removeItem(String item_id) {
         getItemsAndQuantity().remove(item_id);
     }
 

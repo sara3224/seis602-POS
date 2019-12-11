@@ -15,7 +15,7 @@ public class SalesTransaction extends AbstractTransaction {
     public SalesTransaction() {
     }
 
-    public SalesTransaction(Map<Integer, Integer> itemsAndQuantity, String cashierId, Shift shift, int registerId) {
+    public SalesTransaction(Map<String, Integer> itemsAndQuantity, String cashierId, Shift shift, String registerId) {
         super(cashierId, shift, registerId);
         salesRepo = new SalesRepo();
         itemsAndQuantity.forEach((key,value)-> salesLineItems.add(new SalesLineItem(key,value)));
@@ -38,7 +38,7 @@ public class SalesTransaction extends AbstractTransaction {
          this.cashier = new User(id);
     }
 
-    public SalesTransaction(List<SalesLineItem> salesItems, String cashierId, Shift shift, int registerId ) {
+    public SalesTransaction(List<SalesLineItem> salesItems, String cashierId, Shift shift, String registerId ) {
         super(cashierId, shift, registerId);
         this.salesLineItems = salesItems;
         for (SalesLineItem salesLineItem : salesItems) {

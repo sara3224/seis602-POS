@@ -20,7 +20,7 @@ public class InventoryRepo {
     private static File inventory = new File("./data/" + "inventory.tsv");
 
     //TODO: refactor the class to extend AbstractPointOfAction
-    public static void addItem(int itemId, String name, int onhands, double price, double tax, int threshold, int supplierId, int reOrderQty)  {
+    public static void addItem(String itemId, String name, int onhands, double price, double tax, int threshold, String supplierId, int reOrderQty)  {
         if(itemExist(itemId)) {
             System.out.println("Item exists");
             removeItem(itemId);
@@ -61,14 +61,14 @@ public class InventoryRepo {
         return temp.renameTo(inventory);
     }
 
-    static boolean itemExist(int itemId) {
+    static boolean itemExist(String itemId) {
         boolean exist = false;
         try (BufferedReader br = new BufferedReader(new FileReader(inventory))) {
             String st;
             String attributes[] = new String[5];
             while ((st = br.readLine()) != null) {
                 attributes = st.split("\t");
-                if (attributes[0].equals(Integer.toString(itemId))) {
+                if (attributes[0].equals(itemId)) {
                     exist = true;
                 }
             }
@@ -80,17 +80,17 @@ public class InventoryRepo {
         return exist;
     }
 
-    public static Item getItem(int itemId) {
+    public static Item getItem(String itemId) {
         Item item = null;
         try (BufferedReader br = new BufferedReader(new FileReader(inventory))) {
             String st;
             String[] attributes;
             while ((st = br.readLine()) != null) {
                 attributes = st.split("\t");
-                if (attributes[0].equals(Integer.toString(itemId))) {
+                if (attributes[0].equals(itemId)) {
                     item = new Item(itemId, attributes[1], Integer.valueOf(attributes[2]), Double.valueOf(attributes[3]),
                             Double.valueOf(attributes[4]), Integer.valueOf(attributes[5]),
-                            Integer.valueOf(attributes[6]),Integer.valueOf(attributes[7]),Integer.valueOf(attributes[8]));
+                            attributes[6],Integer.valueOf(attributes[7]),Integer.valueOf(attributes[8]));
                 }
             }
         } catch (FileNotFoundException fnf) {
@@ -101,13 +101,13 @@ public class InventoryRepo {
         return item;
     }
 
-    public static void removeItem(int itemId) {
+    public static void removeItem(String itemId) {
         try (BufferedReader br = new BufferedReader(new FileReader(inventory))) {
             String st;
             String[] attributes;
             while ((st = br.readLine()) != null) {
                 attributes = st.split("\t");
-                if (attributes[0].equals(Integer.toString(itemId))) {
+                if (attributes[0].equals(itemId)) {
                     removeLine(st);
                 }
             }

@@ -1,1 +1,7 @@
 salesId	returnId	itemId	qty	price	tax	lineitemamtBeforeTax	lineItemTax	totallineitem
+a8cbc3dd	4b10f621	11	8	10.0	0.04	80.0	3.2	83.2
+a8cbc3dd	4b10f621	12	889	45.33	0.13	40298.37	5238.79	45537.16
+a8cbc3dd	92ab1841	12	1	45.33	0.13	45.33	5.9	51.23
+8a4f5ae4	b09b4c15	12	99	45.33	0.13	4487.67	583.4	5071.07
+8a4f5ae4	b09b4c15	1	9	20.0	0.07	180.0	12.61	192.61
+8a4f5ae4	b09b4c15	3	1	10.0	0.0	10.0	0.0	10.0
