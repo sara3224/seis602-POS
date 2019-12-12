@@ -150,9 +150,9 @@ public class ReturnsRepo {
                     ZonedDateTime returnDate = ZonedDateTime.parse(line[9]);
                     if(Helper.isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(returnDate.toInstant()))) {
                         returnTransaction = new ReturnTransaction();
-                        returnTransaction.setRegisterId(line[4]);
-                        returnTransaction.setTotalAmtReport(Double.valueOf(line[7]));
-                        returnTransaction.setReportDate(line[8]);
+                        returnTransaction.setRegisterId(line[5]);
+                        returnTransaction.setTotalAmtReport(Double.valueOf(line[8]));
+                        returnTransaction.setReportDate(line[9]);
                         returnTransactions.add(returnTransaction);
                     }
                 }

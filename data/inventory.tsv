@@ -5,8 +5,8 @@ id	name	onhands	price	tax	threshold	supplierid	reorderquantity	pending
 2	pen	80	0.99	0.092	50	10	30	0
 12	twelve	1789	45.33	0.13	100	supp1	20	20
 60	ipod2	20	99.99	0.075	50	1	30	0
-45	fortyfive	8	43.00	0.05	10	3	20	20
 50	ipod	40	99.99	0.075	50	1	30	30
 61	pen2	20	1.10	0.0881	30	21	20	20
-80	apple	45	2.80	0.088	21	51	19	0
 62	pen3	0	1.99	0.075	30	3	20	20
+80	apple	45	2.80	0.088	21	51	19	19
+51	cell	100	2.00	0.09	50	4	10	10
