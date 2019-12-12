@@ -61,4 +61,8 @@ public class Item {
     public int getPending() {
         return pending;
     }
+    public String toString()
+    {
+    	return itemId + "\t" + name + "\t" + onhands;
+    }
 }

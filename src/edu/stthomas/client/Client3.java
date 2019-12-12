@@ -55,7 +55,6 @@ public class Client3 {
 			
 			int c;
 			while ((c = in.read()) != -1) {
-	//			System.out.print((char)c);
 				if(nLCount ==1)
 				{
 					users.put(userName, password);
@@ -73,20 +72,13 @@ public class Client3 {
 					continue;
 				}
 				
-				
 				if(count == 1)
 					password += (char)c;
 				else
 					userName += (char)c;
-				
-				
-				
-//				System.out.print((char)c);
 			}
 			users.put(userName, password);
 
-			
-//			System.out.println(users);
 			
 		} finally {
 			if (in != null) {
@@ -200,6 +192,11 @@ public class Client3 {
 					messageBox.setText("Info");
 					messageBox.setMessage("Login Successful\n Welcome User");
 					messageBox.open();
+					shlPosLogIn.close();
+					POSWindow pos = new POSWindow();
+					//TODO uncomment to run Main
+					pos.openWindow();
+					
 //					System.out.println("Reached");
 					}
 				//TODO add POS Window

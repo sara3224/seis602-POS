@@ -30,6 +30,10 @@ public abstract class AbstractPointOfAction implements IPointOfAction {
      */
     @Override
     public String addItem(Integer item_id, int qty) {
+    	
+    	if(itemsAndQuantity.get(item_id) != null)
+    		qty += itemsAndQuantity.get(item_id);
+    	
         Item item = InventoryRepo.getItem(item_id);
         if(item == null) {
             return "Item: " +item_id+ " does not exist...Please enter valid item";
