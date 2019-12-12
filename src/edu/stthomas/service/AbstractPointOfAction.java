@@ -38,7 +38,7 @@ public abstract class AbstractPointOfAction implements IPointOfAction {
         if(item == null) {
             return "Item: " +item_id+ " does not exist...Please enter valid item";
         } else if(qty > item.getOnhands()) {
-            return "For item" +item.getItemId() +"i.e. "+ item.getName()+" max quantity available is: "+item.getOnhands();
+            return "For item" +item.getItemId() +" i.e. "+ item.getName()+" max quantity available is: "+item.getOnhands();
         }
         itemsAndQuantity.put(item_id, qty);
         return "";

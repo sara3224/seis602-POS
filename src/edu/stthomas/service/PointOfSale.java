@@ -2,6 +2,7 @@ package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.exceptions.POSException;
+import edu.stthomas.helper.Helper;
 import edu.stthomas.model.Item;
 import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
@@ -57,14 +58,14 @@ public class PointOfSale extends AbstractPointOfAction {
 
     public void recordPrint() {
         System.out.println("sales id: "+salesRecord.getId() + " cashier id: " +salesRecord.getCashier().getId()+ " shift: "+salesRecord.getShift()+" level: "+salesRecord.getCashier().getLevel()+ " Register: "
-                +salesRecord.getRegister().getRegisterId() + " sales amt: " + salesRecord.getTotalAmtBeforeTax() + " sales tax: " +salesRecord.getTotalTaxAmt()
-                +" total amt: " +salesRecord.getTotalAmt() +" sales time: " +salesRecord.getTransactionTime());
+                +salesRecord.getRegister().getRegisterId() + " sales amt: " + Helper.digit2Doubles(salesRecord.getTotalAmtBeforeTax()) + " sales tax amt: " +Helper.digit2Doubles(salesRecord.getTotalTaxAmt())
+                +" total amt: " +Helper.digit2Doubles(salesRecord.getTotalAmt()) +" sales time: " +salesRecord.getTransactionTime());
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         for(SalesLineItem lineItem: salesLineItems) {
             //4.	Registers will record the register number, the user (cashier), the dates and times of sale, sale items, and the amount of sales.
-            System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
-                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAmtBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
-                    +" total amt: "+lineItem.getLineItemAmt());
+            System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+Helper.digit2Doubles(lineItem.getPrice())
+                    +" tax:" +lineItem.getTax() +" sale amt: "+Helper.digit2Doubles(lineItem.getLineItemAmtBeforeTax()) +" sale tax: "+Helper.digit2Doubles(lineItem.getLineItemTax())
+                    +" total amt: "+Helper.digit2Doubles(lineItem.getLineItemAmt()));
         }
         System.out.println();
     }

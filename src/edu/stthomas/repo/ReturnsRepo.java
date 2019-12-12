@@ -1,5 +1,6 @@
 package edu.stthomas.repo;
 
+import edu.stthomas.helper.Helper;
 import edu.stthomas.model.Item;
 import edu.stthomas.model.ReturnLineItem;
 import edu.stthomas.model.ReturnTransaction;
@@ -61,8 +62,8 @@ public class ReturnsRepo {
     private void record(ReturnTransaction returnRecord) {
             String returnsSave = returnRecord.getSalesId() + "\t" + returnRecord.getId() + "\t" +returnRecord.getCashier().getId() + "\t"
                     +returnRecord.getShift() + "\t" +returnRecord.getCashier().getLevel()+ "\t"
-                +returnRecord.getRegister().getRegisterId() + "\t" + returnRecord.getTotalAmtBeforeTax() + "\t" +returnRecord.getTotalTaxAmt()
-                + "\t" +returnRecord.getTotalAmt() + "\t" +returnRecord.getTransactionTime() + "\n";
+                +returnRecord.getRegister().getRegisterId() + "\t" + Helper.digit2Doubles(returnRecord.getTotalAmtBeforeTax()) + "\t" +Helper.digit2Doubles(returnRecord.getTotalTaxAmt())
+                + "\t" +Helper.digit2Doubles(returnRecord.getTotalAmt()) + "\t" +returnRecord.getTransactionTime() + "\n";
 
         try (FileWriter fw = new FileWriter(returnsFile,true);
              BufferedWriter writer = new BufferedWriter(fw)) {
@@ -75,8 +76,8 @@ public class ReturnsRepo {
         List<ReturnLineItem> returnsLineItems = returnRecord.getReturnLineItems();
         for(ReturnLineItem lineItem: returnsLineItems) {
             lineItemsDetails.append(returnRecord.getSalesId() + "\t" +returnRecord.getId() + "\t" + lineItem.getItemId() + "\t" + lineItem.getQuantity() + "\t" +lineItem.getPrice()
-                    +"\t" +lineItem.getTax() + "\t" +lineItem.getLineItemAmtBeforeTax() + "\t" +lineItem.getLineItemTax()
-                    + "\t" + lineItem.getLineItemAmt() + "\n");
+                    +"\t" +lineItem.getTax() + "\t" +Helper.digit2Doubles(lineItem.getLineItemAmtBeforeTax()) + "\t" +Helper.digit2Doubles(lineItem.getLineItemTax())
+                    + "\t" + Helper.digit2Doubles(lineItem.getLineItemAmt()) + "\n");
         }
 
         try (FileWriter fw = new FileWriter(returnsItemsFile,true);

@@ -27,7 +27,7 @@ public class Client {
         String userId = getString("UserId:");
         String password = getString("Enter password");
         if(User.authenticate(userId,password)){
-            System.out.println("*****Welcome to POS system...you are authenticated as: " + userId + " Please enter shift and register*****\n");
+            System.out.println("*****Welcome to SEIS 602 POS system...you are authenticated as: " + userId + " Please enter shift and register*****\n");
             this.user = new User(userId);
             register();
         } else {

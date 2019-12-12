@@ -19,13 +19,12 @@ import java.nio.file.Files;
 public class InventoryRepo {
     private static File inventory = new File("./data/" + "inventory.tsv");
 
-    //TODO: refactor the class to extend AbstractPointOfAction
     public static void addItem(String itemId, String name, int onhands, double price, double tax, int threshold, String supplierId, int reOrderQty)  {
         if(itemExist(itemId)) {
             System.out.println("Item exists");
             removeItem(itemId);
         }
-        String item = itemId + "\t" + name + "\t" +onhands + "\t" + price +"\t" + Helper.roundUp(tax/100) + "\t"
+        String item = itemId + "\t" + name + "\t" +onhands + "\t" + Helper.digit2Doubles(price) +"\t" + Helper.roundUp4Digit(tax/100) + "\t"
                 + threshold + "\t" + supplierId + "\t" + reOrderQty + "\t" + 0 +"\n";
         try (FileWriter fw = new FileWriter(inventory,true);
              BufferedWriter writer = new BufferedWriter(fw)) {
@@ -37,7 +36,7 @@ public class InventoryRepo {
 
     public static void updateItem(Item updatedItem)  {
         removeItem(updatedItem.getItemId());
-        String item = updatedItem.getItemId()+ "\t" + updatedItem.getName() + "\t" + updatedItem.getOnhands() + "\t" + updatedItem.getPrice() +"\t"
+        String item = updatedItem.getItemId()+ "\t" + updatedItem.getName() + "\t" + updatedItem.getOnhands() + "\t" + Helper.digit2Doubles(updatedItem.getPrice()) +"\t"
                 + updatedItem.getTax() + "\t" + updatedItem.getThreshold() + "\t" + updatedItem.getSupplierId() + "\t"
                 + updatedItem.getReorderQty() + "\t" +updatedItem.getPending() +"\n";
 

@@ -1,6 +1,7 @@
 package edu.stthomas.repo;
 
 import edu.stthomas.enums.Shift;
+import edu.stthomas.helper.Helper;
 import edu.stthomas.model.Item;
 import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
@@ -44,8 +45,8 @@ public class SalesRepo {
 
     private void record(SalesTransaction salesRecord) {
         String salesSave = salesRecord.getId() + "\t" +salesRecord.getCashier().getId() + "\t" +salesRecord.getShift() + "\t" +salesRecord.getCashier().getLevel()+ "\t"
-                +salesRecord.getRegister().getRegisterId() + "\t" + salesRecord.getTotalAmtBeforeTax() + "\t" +salesRecord.getTotalTaxAmt()
-                + "\t" +salesRecord.getTotalAmt() + "\t" +salesRecord.getTransactionTime() + "\n";
+                +salesRecord.getRegister().getRegisterId() + "\t" + Helper.digit2Doubles(salesRecord.getTotalAmtBeforeTax()) + "\t" +Helper.digit2Doubles(salesRecord.getTotalTaxAmt())
+                + "\t" +Helper.digit2Doubles(salesRecord.getTotalAmt()) + "\t" +salesRecord.getTransactionTime() + "\n";
 
         try (FileWriter fw = new FileWriter(salesFile,true);
              BufferedWriter writer = new BufferedWriter(fw)) {
@@ -57,9 +58,9 @@ public class SalesRepo {
         StringBuilder lineItemsDetails = new StringBuilder();
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         for(SalesLineItem lineItem: salesLineItems) {
-            lineItemsDetails.append(salesRecord.getId() + "\t" + lineItem.getItemId() + "\t" + lineItem.getQuantity() + "\t" +lineItem.getPrice()
-                    +"\t" +lineItem.getTax() + "\t" +lineItem.getLineItemAmtBeforeTax() + "\t" +lineItem.getLineItemTax()
-                    + "\t" + lineItem.getLineItemAmt() + "\n");
+            lineItemsDetails.append(salesRecord.getId() + "\t" + lineItem.getItemId() + "\t" + lineItem.getQuantity() + "\t" +Helper.digit2Doubles(lineItem.getPrice())
+                    +"\t" +lineItem.getTax() + "\t" + Helper.digit2Doubles(lineItem.getLineItemAmtBeforeTax()) + "\t" + Helper.digit2Doubles(lineItem.getLineItemTax())
+                    + "\t" + Helper.digit2Doubles(lineItem.getLineItemAmt()) + "\n");
         }
 
         try (FileWriter fw = new FileWriter(salesItemsFile,true);
@@ -95,15 +96,11 @@ public class SalesRepo {
         return (item.getThreshold() >= newOH)? item.getReorderQty():item.getPending();
     }
 
-    public static Collection<SalesTransaction> getSales() {
-        return sales.values();
-    }
-
     public static Collection<SalesTransaction> getSalesForReportX(String cashierId, Shift shift, String reportDate) {
         List<SalesTransaction> salesTransactions = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(salesFile))) {
             String str;
-            SalesTransaction salesTransaction = new SalesTransaction();
+            SalesTransaction salesTransaction;
             while ((str = br.readLine()) != null) { //loop until end of file.
                 String[] line = str.split("\t");
                 //id0	cashier1	shift2	level3	register4	totalAmtBeforeTax5	totalTaxAmt6	totalAmt7	transactionTime8
@@ -119,9 +116,9 @@ public class SalesRepo {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
         } catch (ParseException e) {
-            e.printStackTrace();
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
         }
         return salesTransactions;
     }
@@ -147,9 +144,9 @@ public class SalesRepo {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
         } catch (ParseException e) {
-            e.printStackTrace();
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
         }
         return salesTransactions;
     }

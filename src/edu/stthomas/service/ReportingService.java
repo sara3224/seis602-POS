@@ -1,6 +1,7 @@
 package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
+import edu.stthomas.helper.Helper;
 import edu.stthomas.model.SalesTransaction;
 import edu.stthomas.repo.SalesRepo;
 
@@ -17,7 +18,7 @@ public class ReportingService {
         System.out.println("Cashier:"+cashierId);
 
         double totalSalesIncludingTax = sales.stream().mapToDouble(SalesTransaction::getTotalAmtReport).sum();
-        System.out.println("Total Sales(including tax):" +totalSalesIncludingTax);
+        System.out.println("Total Sales(including tax):" + Helper.digit2Doubles(totalSalesIncludingTax));
         System.out.println("Total transactions :" +sales.size());
     }
 
@@ -27,14 +28,14 @@ public class ReportingService {
 
         double reportZSalesIncludingTax = sales.stream().mapToDouble(SalesTransaction::getTotalAmtReport).sum();
         //display all combined
-        System.out.println("Total Z Sales(including tax):" +reportZSalesIncludingTax);
+        System.out.println("Total Z Sales(including tax):" +Helper.twoDigitNoRound(reportZSalesIncludingTax));
         System.out.println("Total transactions:" +sales.size());
         //display each sales transaction report
         for(SalesTransaction salesTransaction: sales) {
             System.out.println("****************");
             System.out.println("Cashier:"+salesTransaction.getCashier().getId());
             double totalSalesIncludingTax = salesTransaction.getTotalAmtReport();
-            System.out.println("Sales(including tax):" +totalSalesIncludingTax);
+            System.out.println("Sales(including tax):" + Helper.digit2Doubles(totalSalesIncludingTax));
         }
     }
 }
