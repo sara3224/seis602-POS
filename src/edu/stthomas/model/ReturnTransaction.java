@@ -17,6 +17,8 @@ public class ReturnTransaction extends AbstractTransaction {
     private String reason;
     private String salesId;
 
+    public ReturnTransaction(){}
+
     public ReturnTransaction( String saleId, String cashierId, Shift shift, String registerId, String reason) {
         super(cashierId,shift,registerId);
         returnsRepo = new ReturnsRepo();

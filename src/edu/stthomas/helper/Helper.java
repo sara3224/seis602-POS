@@ -3,6 +3,8 @@ package edu.stthomas.helper;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Helper {
     private static DecimalFormat df2Digit = new DecimalFormat("#.00");
@@ -28,5 +30,16 @@ public class Helper {
 
     public static double twoDigitNoRound(double dbl) {
         return Double.parseDouble(df2DigitNoRounding.format(dbl));
+    }
+
+    public static boolean isSameDay(Date reportDate2, Date salesDate) {
+        Calendar requestedDate = Calendar.getInstance();
+        requestedDate.setTime(reportDate2);
+
+        Calendar salesRecordCal = Calendar.getInstance();
+        salesRecordCal.setTime(salesDate);
+
+        return requestedDate.get(Calendar.DAY_OF_YEAR) == salesRecordCal.get(Calendar.DAY_OF_YEAR) &&
+                requestedDate.get(Calendar.YEAR) == salesRecordCal.get(Calendar.YEAR);
     }
 }

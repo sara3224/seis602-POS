@@ -19,8 +19,11 @@ public abstract class AbstractTransaction implements Transaction {
     protected String transactionTime;
     protected SalesRepo salesRepo;
     private String id;
+    private String registerId;
+    private String reportDate;
+    private double totalAmt;
 
-    public AbstractTransaction(){};
+    public AbstractTransaction(){}
 
     public AbstractTransaction(String cashierId, Shift shift, String registerId) {
         this.salesLineItems = new ArrayList<>();
@@ -32,6 +35,26 @@ public abstract class AbstractTransaction implements Transaction {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setRegisterId(String registerId) {
+        this.registerId = registerId;
+    }
+
+    public void setReportDate(String reportDate) {
+        this.reportDate = reportDate;
+    }
+
+    public void setTotalAmtReport(double totalAmt) {
+        this.totalAmt = totalAmt;
+    }
+
+    public double getTotalAmtReport() {
+        return totalAmt;
+    }
+
+    public void setCashier(String id) {
+        this.cashier = new User(id);
     }
 
     public abstract AbstractTransaction getRecord(String id);

@@ -1,5 +1,6 @@
 package edu.stthomas.repo;
 
+import edu.stthomas.enums.Shift;
 import edu.stthomas.helper.Helper;
 import edu.stthomas.model.Item;
 import edu.stthomas.model.ReturnLineItem;
@@ -12,6 +13,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +39,6 @@ public class ReturnsRepo {
         updateInventory(returnRecord);
         return returnId;
     }
-
 
     public static Map<String,Integer> getReturnRecordForReturns(String salesId) {
         Map<String, Integer> returnItemQty = new HashMap<>();
@@ -102,8 +108,61 @@ public class ReturnsRepo {
         }
     }
 
-    public static Map<String, ReturnTransaction> getAllReturns() {
-        return returns;
+//salesid	returnId	cashier	shift	level	register	totalAmtBeforeTax	totalTaxAmt	totalAmt
+    public static Collection<ReturnTransaction> getReturnsForReportZ(Shift shift, String reportDate) {
+        List<ReturnTransaction> returnTransactions = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(returnsFile))) {
+            String str;
+            ReturnTransaction returnTransaction;
+            while ((str = br.readLine()) != null) { //loop until end of file.
+                String[] line = str.split("\t");
+                //salesid0	returnId1	cashier2	shift3	level4	register5	totalAmtBeforeTax6	totalTaxAmt7	totalAmt8 transactionTime9
+                if (line.length>4 && Objects.equals(shift.name(), line[3])) {
+                    ZonedDateTime transactionDate = ZonedDateTime.parse(line[9]);
+                    if(Helper.isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(transactionDate.toInstant()))) {
+                        returnTransaction = new ReturnTransaction();
+                        returnTransaction.setCashier(line[2]);
+                        returnTransaction.setRegisterId(line[5]);
+                        returnTransaction.setTotalAmtReport(Double.valueOf(line[8]));
+                        returnTransaction.setReportDate(line[9]);
+                        returnTransactions.add(returnTransaction);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
+        } catch (ParseException e) {
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
+        }
+        return returnTransactions;
+    }
+
+    //salesid	returnId	cashier	shift	level	register	totalAmtBeforeTax	totalTaxAmt	totalAmt	transactionTime
+    public static Collection<ReturnTransaction> getReturnForReportX(String cashierId, Shift shift, String reportDate) {
+        List<ReturnTransaction> returnTransactions = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(returnsFile))) {
+            String str;
+            ReturnTransaction returnTransaction;
+            while ((str = br.readLine()) != null) { //loop until end of file.
+                String[] line = str.split("\t");
+                //salesid0	returnId1	cashier2	shift3	level4	register5	totalAmtBeforeTax6	totalTaxAmt7	totalAmt8	transactionTime9
+                if (line.length>4 && Objects.equals(line[2], cashierId) && Objects.equals(shift.name(), line[3])) {
+                    ZonedDateTime returnDate = ZonedDateTime.parse(line[9]);
+                    if(Helper.isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(returnDate.toInstant()))) {
+                        returnTransaction = new ReturnTransaction();
+                        returnTransaction.setRegisterId(line[4]);
+                        returnTransaction.setTotalAmtReport(Double.valueOf(line[7]));
+                        returnTransaction.setReportDate(line[8]);
+                        returnTransactions.add(returnTransaction);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
+        } catch (ParseException e) {
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
+        }
+        return returnTransactions;
     }
 
     public ReturnTransaction getReturnsRecord(String returnId) {

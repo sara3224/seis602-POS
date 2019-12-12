@@ -17,7 +17,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -106,7 +105,7 @@ public class SalesRepo {
                 //id0	cashier1	shift2	level3	register4	totalAmtBeforeTax5	totalTaxAmt6	totalAmt7	transactionTime8
                 if (line.length>3 && Objects.equals(line[1], cashierId) && Objects.equals(shift.name(), line[2])) {
                     ZonedDateTime saleDate = ZonedDateTime.parse(line[8]);
-                    if(isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
+                    if(Helper.isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
                         salesTransaction = new SalesTransaction();
                         salesTransaction.setRegisterId(line[4]);
                         salesTransaction.setTotalAmtReport(Double.valueOf(line[7]));
@@ -133,7 +132,7 @@ public class SalesRepo {
                 //id0	cashier1	shift2	level3	register4	totalAmtBeforeTax5	totalTaxAmt6	totalAmt7	transactionTime8
                 if (line.length>3 && Objects.equals(shift.name(), line[2])) {
                     ZonedDateTime saleDate = ZonedDateTime.parse(line[8]);
-                    if(isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
+                    if(Helper.isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
                         salesTransaction = new SalesTransaction();
                         salesTransaction.setCashier(line[1]);
                         salesTransaction.setRegisterId(line[4]);
@@ -151,17 +150,6 @@ public class SalesRepo {
         return salesTransactions;
     }
 
-
-    private static boolean isSameDay(Date reportDate2, Date salesDate) {
-        Calendar requestedDate = Calendar.getInstance();
-        requestedDate.setTime(reportDate2);
-
-        Calendar salesRecordCal = Calendar.getInstance();
-        salesRecordCal.setTime(salesDate);
-
-        return requestedDate.get(Calendar.DAY_OF_YEAR) == salesRecordCal.get(Calendar.DAY_OF_YEAR) &&
-                requestedDate.get(Calendar.YEAR) == salesRecordCal.get(Calendar.YEAR);
-    }
 
     /**
      * get sales record from the sales and salesLineitems tsv file
