@@ -94,7 +94,7 @@ public class Client {
                                 try {
                                     pos.complete();
                                 } catch (POSException e) {
-                                    System.out.println(e.getStackTrace());
+                                    e.printStackTrace();
                                     break;
                                 }
                             }
