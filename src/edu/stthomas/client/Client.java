@@ -62,8 +62,8 @@ public class Client {
             switch (choice) {
                 case "1":
                     System.out.println("Add Item");
-                    InventoryRepo.addItem(getString("enter item Id"), getString("enter item description"), getPositiveInt("enter on hands quantity"),getPositiveDouble("enter price"),
-                            getPositiveDouble("enter tax percentage"), getPositiveInt("enter threshold"), getString("enter supplier id"), getPositiveInt("enter re-order quantity"));
+                    InventoryRepo.addItem(getString("enter item Id"), getString("enter item description"), getZeroPlusInt("enter on hands quantity"),getZeroPlusDouble("enter price"),
+                            getZeroPlusDouble("enter tax percentage"), getZeroPlusInt("enter threshold"), getString("enter supplier id"), getZeroPlusInt("enter re-order quantity"));
                     break;
                 case "2":
                     System.out.println("Delete Item");
@@ -74,7 +74,7 @@ public class Client {
                     PointOfSale pos = new PointOfSale(user.getId(), shift, registerId);
                     String next = null;
                     while(!Objects.equals("X", next)) {
-                        String itemAdded = pos.addItem((getString("enter item id")), getPositiveInt("enter quantity"));
+                        String itemAdded = pos.addItem((getString("enter item id")), getZeroPlusInt("enter quantity"));
                         if(!itemAdded.equals("")) {
                             System.out.println(itemAdded);
                         } else {
@@ -202,7 +202,48 @@ public class Client {
     /**
      * @return
      */
+    private static int getZeroPlusInt(String desc) {
+        System.out.println(desc);
+        int input = 0;
+        try {
+            input = myObj.nextInt();
+            if (input < 0) {
+                throw new NumberFormatException();
+            }
+        }catch (NumberFormatException e) {
+            System.out.println("Input should be a positive integer, please start over");
+            throw new NumberFormatException();
+        } catch (InputMismatchException ime) {
+            System.out.println("Input should be a positive integer, please start over");
+            throw new InputMismatchException();
+        }
+
+        return input;
+    }
+
+    /**
+     * @return
+     */
     private static double getPositiveDouble(String desc) {
+        System.out.println(desc);
+        double dbl = 0;
+        try {
+            dbl = myObj.nextDouble();
+            if(dbl<0) {
+                throw new NumberFormatException();
+            }
+        }catch (Exception e) {
+            System.out.println("input should be positive a number, please start over");
+            throw new NumberFormatException("input should be positive a double, please start over");
+        }
+        return dbl;
+    }
+
+
+    /**
+     * @return
+     */
+    private static double getZeroPlusDouble(String desc) {
         System.out.println(desc);
         double dbl = 0;
         try {

@@ -21,7 +21,7 @@ public class InventoryRepo {
 
     public static void addItem(String itemId, String name, int onhands, double price, double tax, int threshold, String supplierId, int reOrderQty)  {
         if(itemExist(itemId)) {
-            System.out.println("Item exists");
+            System.out.println("Item id exists..replaced with above details");
             removeItem(itemId);
         }
         String item = itemId + "\t" + name + "\t" +onhands + "\t" + Helper.digit2Doubles(price) +"\t" + Helper.roundUp4Digit(tax/100) + "\t"
