@@ -38,4 +38,5 @@ id	name	onhands	price	tax	threshold	supplierid	reorderquantity	pending
 49	ink	197	19.90	0.086	100	77	100	0
 50	nespresso	15	328.29	0.093	20	100	15	0
 25	console_ps	20	299.93	0.093	30	25	20	0
-
+56	capsules	198	.69	0.092	500	89	200	0
+55	cup	76	2.99	0.129	80	90	25	0
