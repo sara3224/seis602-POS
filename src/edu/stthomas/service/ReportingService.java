@@ -21,7 +21,7 @@ public class ReportingService {
 
         Collection<SalesTransaction> sales = SalesRepo.getSalesForReportX(cashierId, shift, reportDate);
         double totalSalesIncludingTax = sales.stream().mapToDouble(SalesTransaction::getTotalAmtReport).sum();
-        System.out.println("Total Sales(including tax):" + Helper.digit2Doubles(totalSalesIncludingTax));
+        System.out.println("Total Sales (including tax):" + Helper.digit2Doubles(totalSalesIncludingTax));
         System.out.println("Total transactions :" +sales.size());
 
 

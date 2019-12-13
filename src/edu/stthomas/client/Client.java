@@ -23,11 +23,12 @@ public class Client {
 
     static Scanner myObj = new Scanner(System.in);
     public void login() {
-        System.out.println("Welcome to SEIS 602 POS System!!!. Please enter credentials to get started....");
+        System.out.println("**********Welcome to Mom and Pops Grocery Store**********. \nPlease enter credentials to get started....");
         String userId = getString("UserId:");
         String password = getString("Enter password");
         if(User.authenticate(userId,password)){
-            System.out.println("*****Welcome to SEIS 602 POS system...you are authenticated as: " + userId + " Please enter shift and register*****\n");
+            System.out.println("you are authenticated successfully as: " + userId);
+//            System.out.println("please enter shift and register");
             this.user = new User(userId);
             register();
         } else {
@@ -73,7 +74,7 @@ public class Client {
                 case "1":
                     System.out.println("Add Item");
                     InventoryRepo.addItem(getString("enter item Id"), getString("enter item description"), getPositiveInt("enter on hands quantity"),getPositiveDouble("enter price"),
-                            getPositiveDouble("enter tax percentage"), getPositiveInt("enter threshold"), getString("enter supplier id"), getPositiveInt("enter replenishment quantity"));
+                            getPositiveDouble("enter tax percentage"), getPositiveInt("enter threshold"), getString("enter supplier id"), getPositiveInt("enter re-order quantity"));
                     break;
                 case "2":
                     System.out.println("Delete Item");
@@ -100,12 +101,12 @@ public class Client {
                             }
                         }
                     }
-                    System.out.println("Thanks..transaction is done..");
+                    System.out.println("Thank you for shopping at Mom and Pops shop..");
                     break;
                 case "21": //POS returns all sales
                     String salesId = getString("Enter sales Id:");
                     SalesTransaction salesTransaction = SalesRepo.getSalesRecordForReturns(salesId);
-                    if(salesTransaction.getSalesLineItems().size() == 0) {
+                    if(salesTransaction.getSalesLineItems().isEmpty()) {
                         System.out.println("salesId: "+salesId +" does not exists, please enter a valid sales id for returning items");
                         break;
                     }
@@ -240,12 +241,12 @@ public class Client {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Please select one of the following options\n");
         if(user.getLevel() == 1) {
-            stringBuilder.append("1\tInventory -- add item \n");
-            stringBuilder.append("2\tInventory -- delete item \n");
             stringBuilder.append("11\tPOS -- new sale\n");
             stringBuilder.append("21\tPOS -- returns..cancel all sales\n");
             stringBuilder.append("22\tPOS -- return..individual items\n");
         } else if (user.getLevel() == 2) {
+            stringBuilder.append("1\tInventory -- add item \n");
+            stringBuilder.append("2\tInventory -- delete item \n");
             stringBuilder.append("31\tPOS -- report X. sales for a cashier with a shift and day\n");
             stringBuilder.append("32\tPOS -- report Z. sales for a shift and day\n");
         }
