@@ -58,8 +58,9 @@ public class PointOfSale extends AbstractPointOfAction {
 
     @Override
     public void recordPrint() {
-        System.out.println("sales id: "+salesRecord.getId() + " cashier id: " +salesRecord.getCashier().getId()+ " shift: "+salesRecord.getShift()+" level: "+salesRecord.getCashier().getLevel()+ " Register: "
-                +salesRecord.getRegister().getRegisterId() + " sales amt: " + Helper.digit2Doubles(salesRecord.getTotalAmtBeforeTax()) + " sales tax amt: " +Helper.digit2Doubles(salesRecord.getTotalTaxAmt())
+        System.out.println("Thank you for shopping at mom and pops shop. Below are sales transaction details.\n");
+        System.out.println("sales id: "+salesRecord.getId() + "\ncashier id: " +salesRecord.getCashier().getId()+ " shift: "+salesRecord.getShift() + "\nRegister: "
+                +salesRecord.getRegister().getRegisterId() + "\nsales amt: " + Helper.digit2Doubles(salesRecord.getTotalAmtBeforeTax()) + " sales tax amt: " +Helper.digit2Doubles(salesRecord.getTotalTaxAmt())
                 +" total amt: " +Helper.digit2Doubles(salesRecord.getTotalAmt()) +" sales time: " +salesRecord.getTransactionTime());
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         for(SalesLineItem lineItem: salesLineItems) {
