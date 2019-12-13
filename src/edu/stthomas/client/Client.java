@@ -11,6 +11,7 @@ import edu.stthomas.service.PointOfSale;
 import edu.stthomas.service.ReportingService;
 import edu.stthomas.service.User;
 
+import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -28,7 +29,6 @@ public class Client {
         String password = getString("Enter password");
         if(User.authenticate(userId,password)){
             System.out.println("you are authenticated successfully as: " + userId);
-//            System.out.println("please enter shift and register");
             this.user = new User(userId);
             register();
         } else {
@@ -55,17 +55,6 @@ public class Client {
         start();
     }
 
-    private int getInt(String desc) {
-        System.out.println(desc);
-        int input = 0;
-        try {
-            input = myObj.nextInt();
-        }catch (Exception e) {
-            throw new NumberFormatException("input should be a number");
-        }
-        return input;
-    }
-
     public void start() {
         System.out.println(initialScreen());
         try {
@@ -85,7 +74,7 @@ public class Client {
                     PointOfSale pos = new PointOfSale(user.getId(), shift, registerId);
                     String next = null;
                     while(!Objects.equals("X", next)) {
-                        String itemAdded = pos.addItem((getString("enter item id")), getInt("enter quantity"));
+                        String itemAdded = pos.addItem((getString("enter item id")), getPositiveInt("enter quantity"));
                         if(!itemAdded.equals("")) {
                             System.out.println(itemAdded);
                         } else {
@@ -95,7 +84,7 @@ public class Client {
                                 try {
                                     pos.complete();
                                 } catch (POSException e) {
-                                    e.printStackTrace();
+                                    System.out.println(e.getMessage());
                                     break;
                                 }
                             }
@@ -129,7 +118,7 @@ public class Client {
                     PointOfReturn pointOfReturn = new PointOfReturn(salesId, user.getId(), shift, registerId,"");
                     String nextR = null;
                     while(!Objects.equals("X", nextR)) {
-                        pointOfReturn.addItem((getString("enter item id")), getInt("enter quantity"));
+                        pointOfReturn.addItem((getString("enter item id")), getPositiveInt("enter quantity"));
                             System.out.println("press X to finalize return or C to enter next return item id");
                             nextR = myObj.next();
                             if (Objects.equals("X", nextR)) {
@@ -182,12 +171,11 @@ public class Client {
         try {
             input = myObj.next();
         }catch (Exception e) {
-            throw new NumberFormatException("input should be a string");
+            System.out.println("Input should be a string, please start over");
+            throw new NumberFormatException();
         }
         return input;
     }
-
-
 
     /**
      * @return
@@ -200,24 +188,15 @@ public class Client {
             if (input <= 0) {
                 throw new NumberFormatException();
             }
-        }catch (Exception e) {
-            throw new NumberFormatException("input should be a positive integer");
+        }catch (NumberFormatException e) {
+            System.out.println("Input should be a positive integer, please start over");
+            throw new NumberFormatException();
+        } catch (InputMismatchException ime) {
+            System.out.println("Input should be a positive integer, please start over");
+            throw new InputMismatchException();
         }
-        return input;
-    }
 
-    /**
-     * @return
-     */
-    private static double getDouble(String desc) {
-        System.out.println(desc);
-        double dbl = 0;
-        try {
-            dbl = myObj.nextDouble();
-        }catch (Exception e) {
-            throw new NumberFormatException("inpout should be a double");
-        }
-        return dbl;
+        return input;
     }
 
     /**
@@ -232,7 +211,8 @@ public class Client {
                 throw new NumberFormatException();
             }
         }catch (Exception e) {
-            throw new NumberFormatException("input should be positive a double");
+            System.out.println("input should be positive a number, please start over");
+            throw new NumberFormatException("input should be positive a double, please start over");
         }
         return dbl;
     }
