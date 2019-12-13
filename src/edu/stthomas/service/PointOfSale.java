@@ -56,6 +56,7 @@ public class PointOfSale extends AbstractPointOfAction {
         return "";
     }
 
+    @Override
     public void recordPrint() {
         System.out.println("sales id: "+salesRecord.getId() + " cashier id: " +salesRecord.getCashier().getId()+ " shift: "+salesRecord.getShift()+" level: "+salesRecord.getCashier().getLevel()+ " Register: "
                 +salesRecord.getRegister().getRegisterId() + " sales amt: " + Helper.digit2Doubles(salesRecord.getTotalAmtBeforeTax()) + " sales tax amt: " +Helper.digit2Doubles(salesRecord.getTotalTaxAmt())
