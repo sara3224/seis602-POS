@@ -1,25 +1,34 @@
 package edu.stthomas.repo;
 
+import edu.stthomas.enums.Shift;
+import edu.stthomas.helper.Helper;
 import edu.stthomas.model.Item;
 import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * manage sales transactions
  */
 public class SalesRepo {
-    //TODO: report x
-    //TODO report y
     public static final Map<String, SalesTransaction> sales = new HashMap<>();
     private static File salesFile = new File("./data/" + "sales.tsv");
     private static File salesItemsFile = new File("./data/" + "salesLineItems.tsv");
@@ -35,8 +44,8 @@ public class SalesRepo {
 
     private void record(SalesTransaction salesRecord) {
         String salesSave = salesRecord.getId() + "\t" +salesRecord.getCashier().getId() + "\t" +salesRecord.getShift() + "\t" +salesRecord.getCashier().getLevel()+ "\t"
-                +salesRecord.getRegister().getRegisterId() + "\t" + salesRecord.getTotalAmtBeforeTax() + "\t" +salesRecord.getTotalTaxAmt()
-                + "\t" +salesRecord.getTotalAmt() + "\t" +salesRecord.getTransactionTime() + "\n";
+                +salesRecord.getRegister().getRegisterId() + "\t" + Helper.digit2Doubles(salesRecord.getTotalAmtBeforeTax()) + "\t" +Helper.digit2Doubles(salesRecord.getTotalTaxAmt())
+                + "\t" +Helper.digit2Doubles(salesRecord.getTotalAmt()) + "\t" +salesRecord.getTransactionTime() + "\n";
 
         try (FileWriter fw = new FileWriter(salesFile,true);
              BufferedWriter writer = new BufferedWriter(fw)) {
@@ -48,9 +57,9 @@ public class SalesRepo {
         StringBuilder lineItemsDetails = new StringBuilder();
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         for(SalesLineItem lineItem: salesLineItems) {
-            lineItemsDetails.append(salesRecord.getId() + "\t" + lineItem.getItemId() + "\t" + lineItem.getQuantity() + "\t" +lineItem.getPrice()
-                    +"\t" +lineItem.getTax() + "\t" +lineItem.getLineItemAmtBeforeTax() + "\t" +lineItem.getLineItemTax()
-                    + "\t" + lineItem.getLineItemAmt() + "\n");
+            lineItemsDetails.append(salesRecord.getId() + "\t" + lineItem.getItemId() + "\t" + lineItem.getQuantity() + "\t" +Helper.digit2Doubles(lineItem.getPrice())
+                    +"\t" +lineItem.getTax() + "\t" + Helper.digit2Doubles(lineItem.getLineItemAmtBeforeTax()) + "\t" + Helper.digit2Doubles(lineItem.getLineItemTax())
+                    + "\t" + Helper.digit2Doubles(lineItem.getLineItemAmt()) + "\n");
         }
 
         try (FileWriter fw = new FileWriter(salesItemsFile,true);
@@ -86,11 +95,98 @@ public class SalesRepo {
         return (item.getThreshold() >= newOH)? item.getReorderQty():item.getPending();
     }
 
-    public static Collection<SalesTransaction> getSales() {
-        return sales.values();
+    public static Collection<SalesTransaction> getSalesForReportX(String cashierId, Shift shift, String reportDate) {
+        List<SalesTransaction> salesTransactions = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(salesFile))) {
+            String str;
+            SalesTransaction salesTransaction;
+            while ((str = br.readLine()) != null) { //loop until end of file.
+                String[] line = str.split("\t");
+                //id0	cashier1	shift2	level3	register4	totalAmtBeforeTax5	totalTaxAmt6	totalAmt7	transactionTime8
+                if (line.length>3 && Objects.equals(line[1], cashierId) && Objects.equals(shift.name(), line[2])) {
+                    ZonedDateTime saleDate = ZonedDateTime.parse(line[8]);
+                    if(Helper.isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
+                        salesTransaction = new SalesTransaction();
+                        salesTransaction.setRegisterId(line[4]);
+                        salesTransaction.setTotalAmtReport(Double.valueOf(line[7]));
+                        salesTransaction.setReportDate(line[8]);
+                        salesTransactions.add(salesTransaction);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
+        } catch (ParseException e) {
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
+        }
+        return salesTransactions;
     }
 
+    public static Collection<SalesTransaction> getSalesForReportZ(Shift shift, String reportDate) {
+        List<SalesTransaction> salesTransactions = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(salesFile))) {
+            String str;
+            SalesTransaction salesTransaction = new SalesTransaction();
+            while ((str = br.readLine()) != null) { //loop until end of file.
+                String[] line = str.split("\t");
+                //id0	cashier1	shift2	level3	register4	totalAmtBeforeTax5	totalTaxAmt6	totalAmt7	transactionTime8
+                if (line.length>3 && Objects.equals(shift.name(), line[2])) {
+                    ZonedDateTime saleDate = ZonedDateTime.parse(line[8]);
+                    if(Helper.isSameDay(new SimpleDateFormat("yyy-MM-dd").parse(reportDate), Date.from(saleDate.toInstant()))) {
+                        salesTransaction = new SalesTransaction();
+                        salesTransaction.setCashier(line[1]);
+                        salesTransaction.setRegisterId(line[4]);
+                        salesTransaction.setTotalAmtReport(Double.valueOf(line[7]));
+                        salesTransaction.setReportDate(line[8]);
+                        salesTransactions.add(salesTransaction);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
+        } catch (ParseException e) {
+            System.out.println("Please enter date in 'YYYY-MM-DD' format only, please retry.");
+        }
+        return salesTransactions;
+    }
+
+
+    /**
+     * get sales record from the sales and salesLineitems tsv file
+     * @param salesId
+     * @return
+     */
     public static SalesTransaction getSalesRecord(String salesId) {
         return sales.get(salesId);
+    }
+
+    /**
+     * get sales record from the sales and salesLineitems tsv file
+     * @param salesId
+     * @return
+     */
+    public static SalesTransaction getSalesRecordForReturns(String salesId) {
+        SalesTransaction salesTransaction = sales.get(salesId);
+        if(salesTransaction == null) {
+            salesTransaction = new SalesTransaction();
+            List<SalesLineItem> salesLineItems = new ArrayList<>();
+            try {
+                try (BufferedReader br = new BufferedReader(new FileReader(salesItemsFile))) {
+                    String str;
+                    while ((str = br.readLine()) != null) { //loop until end of file.
+                        String[] line = str.split("\t");
+                        if (Objects.equals(line[0], salesId)) {
+                            salesLineItems.add(new SalesLineItem(line[1], Integer.valueOf(line[2]),Double.valueOf(line[3]), Double.valueOf(line[4])));
+                        }
+                    }
+                }
+                salesTransaction = new SalesTransaction(salesLineItems);
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found" + e);
+            } catch (IOException e) {
+                System.out.println("File not found" + e);
+            }
+        }
+        return salesTransaction;
     }
 }

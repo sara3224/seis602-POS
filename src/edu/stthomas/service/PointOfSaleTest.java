@@ -1,35 +1,30 @@
 package edu.stthomas.service;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import edu.stthomas.enums.Shift;
+import edu.stthomas.repo.InventoryRepo;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class PointOfSaleTest {
 
 	@Test
 	public void test1() {
-		PointOfSale pos = new PointOfSale("1001", Shift.DAY, 1);
-		pos.addItem(1, 2);
-	    pos.addItem(2, 3);
-		int a=pos.getItemsAndQuantity().get(1);
-		int b=pos.getItemsAndQuantity().get(2);
-	    assertEquals(a,2);
-	    assertEquals(b,3);
+		PointOfSale pos = new PointOfSale("1001", Shift.DAY, "1");
+
+		InventoryRepo.removeItem("foo");
+		Assert.assertEquals("Item: foo does not exist...Please enter valid item",pos.addItem("foo", 3));
+		InventoryRepo.addItem("foo","",10,1,0,1,"1",10);
+		Assert.assertNotEquals("Item: foo does not exist...Please enter valid item",pos.addItem("foo", 3));
+
+		InventoryRepo.removeItem("bar");
+		Assert.assertEquals("Item: bar does not exist...Please enter valid item",pos.addItem("bar", 3));
+		InventoryRepo.addItem("bar","",10,1,0,1,"1",10);
+		Assert.assertNotEquals("Item: bar does not exist...Please enter valid item",pos.addItem("bar", 3));
+
+		Assert.assertEquals(2, pos.getItemsAndQuantity().size());
+
+		InventoryRepo.removeItem("foo");
+		InventoryRepo.removeItem("bar");
 	}
 
-	
-	@Test
-	public void test2() {
-		PointOfSale pos = new PointOfSale("1001", Shift.DAY, 1);
-		pos.addItem(1, 2);
-	    pos.addItem(2, 3);
-	    pos.removeItem(2);
-		int a=pos.getItemsAndQuantity().get(1);
-	    assertEquals(a,2);
-	}
-	
-	
-	
 }

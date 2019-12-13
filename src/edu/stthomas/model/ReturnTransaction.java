@@ -1,6 +1,7 @@
 package edu.stthomas.model;
 
 import edu.stthomas.enums.Shift;
+import edu.stthomas.exceptions.POSException;
 import edu.stthomas.repo.ReturnsRepo;
 import edu.stthomas.repo.SalesRepo;
 
@@ -16,22 +17,33 @@ public class ReturnTransaction extends AbstractTransaction {
     private String reason;
     private String salesId;
 
-    public ReturnTransaction(Map<Integer, Integer> itemsAndQuantity, String saleId, String cashierId, Shift shift, int registerId, String reason) {
+    public ReturnTransaction(){}
+
+    public ReturnTransaction( String saleId, String cashierId, Shift shift, String registerId, String reason) {
         super(cashierId,shift,registerId);
         returnsRepo = new ReturnsRepo();
         this.salesId = saleId;
-        SalesTransaction salesRecord = SalesRepo.getSalesRecord(salesId);
         this.reason = reason;
-        List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         returnLineItems = new ArrayList<>();
+    }
 
-        itemsAndQuantity.forEach((key,value) -> {
-            Optional<SalesLineItem> salesLineItemOption = salesLineItems.stream().filter(it->it.getItemId() == key).findFirst();
-            if(salesLineItemOption.isPresent()) {
+    public void calculateReturnDetails(Map<String, Integer> itemsAndQuantity) throws POSException{
+        SalesTransaction salesRecord = SalesRepo.getSalesRecordForReturns(salesId);
+        List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
+
+        for (Map.Entry<String, Integer> entry : itemsAndQuantity.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            Optional<SalesLineItem> salesLineItemOption = salesLineItems.stream()
+                    .filter(it -> it.getItemId().equals(key))
+                    .findFirst();
+            if (salesLineItemOption.isPresent()) {
                 SalesLineItem salesLineItem = salesLineItemOption.get();
                 returnLineItems.add(new ReturnLineItem(salesLineItem, value, this.reason));
+            } else {
+                    throw new POSException("Item:"+key+ " is not associated with sales: "+salesId + " Please re-enter transaction");
             }
-        });
+        }
 
         for (ReturnLineItem returnLineItem: returnLineItems) {
             totalAmtBeforeTax += returnLineItem.getLineItemAmtBeforeTax();

@@ -3,11 +3,15 @@ package edu.stthomas.model;
 import edu.stthomas.enums.Shift;
 import edu.stthomas.repo.SalesRepo;
 
+import java.util.List;
 import java.util.Map;
 
 public class SalesTransaction extends AbstractTransaction {
 
-    public SalesTransaction(Map<Integer, Integer> itemsAndQuantity, String cashierId, Shift shift, int registerId) {
+    public SalesTransaction() {
+    }
+
+    public SalesTransaction(Map<String, Integer> itemsAndQuantity, String cashierId, Shift shift, String registerId) {
         super(cashierId, shift, registerId);
         salesRepo = new SalesRepo();
         itemsAndQuantity.forEach((key,value)-> salesLineItems.add(new SalesLineItem(key,value)));
@@ -17,6 +21,15 @@ public class SalesTransaction extends AbstractTransaction {
             totalTaxAmt += salesLineItem.getLineItemTax();
         }
     }
+
+    public SalesTransaction(List<SalesLineItem> salesItems ) {
+        this.salesLineItems = salesItems;
+        for (SalesLineItem salesLineItem : salesItems) {
+            totalAmtBeforeTax += salesLineItem.getLineItemAmtBeforeTax();
+            totalTaxAmt += salesLineItem.getLineItemTax();
+        }
+    }
+
     public SalesTransaction getRecord(String id) {
         return SalesRepo.getSalesRecord(id);
     }

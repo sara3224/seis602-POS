@@ -11,7 +11,4 @@ public class ReturnLineItem extends AbstractLineItem {
         this.reason = reason;
     }
 
-    public String getReason() {
-        return reason;
-    }
 }

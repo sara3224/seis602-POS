@@ -48,7 +48,13 @@ public class User {
     }
 
     public int getLevel() {
-        return cashierLevels.get(getId());
+        int level = 0;
+        try {
+            level = cashierLevels.get(getId());
+        }catch(Exception e){
+
+        }
+        return level;
     }
     
     public HashMap<String, String> getUsers()

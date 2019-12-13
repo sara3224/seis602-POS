@@ -5,12 +5,12 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class ItemTest {
-	Item item = new Item(1,"apple",10,1.00,0.05,20,100,50,0);
+	Item item = new Item("1","apple",10,1.00,0.05,20,"100",50,0);
 	
 
 	@Test
 	public void testGetItemId() {
-		int a=item.getItemId();
+		String a=item.getItemId();
 		assertEquals(a,1);
 	}
 
@@ -46,7 +46,7 @@ public class ItemTest {
 
 	@Test
 	public void testGetSupplierId() {
-		int a = item.getSupplierId();
+		String a = item.getSupplierId();
 		assertEquals(a,100);
 	}
 

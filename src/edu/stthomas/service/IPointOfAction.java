@@ -3,9 +3,9 @@ package edu.stthomas.service;
 import java.util.Map;
 
 public interface IPointOfAction {
-    String addItem(Integer item_id, int qty);
+    String addItem(String item_id, int qty);
 
-    Map<Integer, Integer> getItemsAndQuantity();
+    Map<String, Integer> getItemsAndQuantity();
 
-    void removeItem(Integer item_id);
+    void removeItem(String item_id);
 }

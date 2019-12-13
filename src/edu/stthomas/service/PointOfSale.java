@@ -2,6 +2,7 @@ package edu.stthomas.service;
 
 import edu.stthomas.enums.Shift;
 import edu.stthomas.exceptions.POSException;
+import edu.stthomas.helper.Helper;
 import edu.stthomas.model.Item;
 import edu.stthomas.model.SalesLineItem;
 import edu.stthomas.model.SalesTransaction;
@@ -20,20 +21,20 @@ import java.util.Map;
  *
  */
 public class PointOfSale extends AbstractPointOfAction {
-    public PointOfSale(String cashierId, Shift shift, int registerId) {
+    public PointOfSale(String cashierId, Shift shift, String registerId) {
         super(cashierId, shift, registerId);
     }
 
     @Override
-    public Map<Integer, Integer> getItemsAndQuantity() {
+    public Map<String, Integer> getItemsAndQuantity() {
         return itemsAndQuantity;
     }
 
     //call the pricing service to get cost of each item and calculate total
     public SalesTransaction complete() throws POSException {
         //validate if items are still in inventory
-        for(Map.Entry<Integer,Integer> itemQty: getItemsAndQuantity().entrySet()) {
-            int itemId = itemQty.getKey();
+        for(Map.Entry<String,Integer> itemQty: getItemsAndQuantity().entrySet()) {
+            String itemId = itemQty.getKey();
             int qty = itemQty.getValue();
             Item item = InventoryRepo.getItem(itemId);
             if(item == null) {
@@ -43,7 +44,7 @@ public class PointOfSale extends AbstractPointOfAction {
             }
         }
         salesRecord = new SalesTransaction(itemsAndQuantity, cashierId, shift, registerId);
-        String saleId = salesRecord.save(salesRecord);
+        saleId = salesRecord.save(salesRecord);
         salesRecord =  salesRecord.getRecord(saleId);
         recordPrint();
         return salesRecord;
@@ -57,14 +58,14 @@ public class PointOfSale extends AbstractPointOfAction {
 
     public void recordPrint() {
         System.out.println("sales id: "+salesRecord.getId() + " cashier id: " +salesRecord.getCashier().getId()+ " shift: "+salesRecord.getShift()+" level: "+salesRecord.getCashier().getLevel()+ " Register: "
-                +salesRecord.getRegister().getRegisterId() + " sales amt: " + salesRecord.getTotalAmtBeforeTax() + " sales tax: " +salesRecord.getTotalTaxAmt()
-                +" total amt: " +salesRecord.getTotalAmt() +" sales time: " +salesRecord.getTransactionTime());
+                +salesRecord.getRegister().getRegisterId() + " sales amt: " + Helper.digit2Doubles(salesRecord.getTotalAmtBeforeTax()) + " sales tax amt: " +Helper.digit2Doubles(salesRecord.getTotalTaxAmt())
+                +" total amt: " +Helper.digit2Doubles(salesRecord.getTotalAmt()) +" sales time: " +salesRecord.getTransactionTime());
         List<SalesLineItem> salesLineItems = salesRecord.getSalesLineItems();
         for(SalesLineItem lineItem: salesLineItems) {
             //4.	Registers will record the register number, the user (cashier), the dates and times of sale, sale items, and the amount of sales.
-            System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+lineItem.getPrice()
-                    +" tax:" +lineItem.getTax() +" sale amt: "+lineItem.getLineItemAmtBeforeTax() +" sale tax: "+lineItem.getLineItemTax()
-                    +" total amt: "+lineItem.getLineItemAmt());
+            System.out.println("item id:"+lineItem.getItemId()+" quantity:"+lineItem.getQuantity() + " price: "+Helper.digit2Doubles(lineItem.getPrice())
+                    +" tax:" +lineItem.getTax() +" sale amt: "+Helper.digit2Doubles(lineItem.getLineItemAmtBeforeTax()) +" sale tax: "+Helper.digit2Doubles(lineItem.getLineItemTax())
+                    +" total amt: "+Helper.digit2Doubles(lineItem.getLineItemAmt()));
         }
         System.out.println();
     }
