@@ -90,15 +90,18 @@ public class PointOfReturn extends AbstractPointOfAction {
 
     @Override
     public void recordPrint() {
-        System.out.println("return for sales id: " + returnRecord.getSalesId() + " cashier id: "
-                +returnRecord.getCashier().getId()+ " shift: "+returnRecord.getShift()+" level: "+returnRecord.getCashier().getLevel()+ " Register: "
-                +returnRecord.getRegister().getRegisterId() + " refund amt: " + Helper.digit2Doubles(returnRecord.getTotalAmtBeforeTax()) + " refund tax: " +Helper.digit2Doubles(returnRecord.getTotalTaxAmt())
-                +" total refund amt: " +Helper.digit2Doubles(returnRecord.getTotalAmt()) +" return time: " +returnRecord.getTransactionTime());
+        System.out.println("return for sales id: " + returnRecord.getSalesId()
+                + "\ncashier id: " +returnRecord.getCashier().getId()
+                + "\nshift: "+returnRecord.getShift()
+                + "\nRegister: " +returnRecord.getRegister().getRegisterId()
+                + "\nrefund amt: " + Helper.digit2Doubles(returnRecord.getTotalAmtBeforeTax())
+                + "\nrefund tax: " +Helper.digit2Doubles(returnRecord.getTotalTaxAmt())
+                +"\ntotal refund amt: " +Helper.digit2Doubles(returnRecord.getTotalAmt())
+                +"\nreturn time: " +returnRecord.getTransactionTime());
         for(ReturnLineItem returnLineItem : returnRecord.getReturnLineItems()) {
             System.out.println("Item:" +returnLineItem.getItemId() + " price: "+Helper.digit2Doubles(returnLineItem.getPrice())+ " tax: "+ returnLineItem.getTax()
             +" qty:"+returnLineItem.getQuantity() + " sale refund: "+Helper.digit2Doubles(returnLineItem.getLineItemAmtBeforeTax()) + " tax refund:"+
                     Helper.digit2Doubles(returnLineItem.getLineItemTax()) + " total refund: "+ Helper.digit2Doubles(returnLineItem.getLineItemAmt()));
         }
-
     }
 }
