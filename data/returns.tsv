@@ -1,2 +1,5 @@
 salesid	returnId	cashier	shift	level	register	totalAmtBeforeTax	totalTaxAmt	totalAmt	transactionTime
 50e1c05b	c8ed21e5	sara3224	NIGHT	1	9	18.20	1.46	19.66	2019-12-12T20:34:32.059-06:00[America/Chicago]
+b4fb1d6a	77a4ac79	stre1002	DAY	1	10	189999.00	17574.91	207573.91	2019-12-13T17:34:03.848-06:00[America/Chicago]
+e7a9d54f	5bf46f01	stre1002	DAY	1	10	32.89	3.12	36.01	2019-12-13T17:40:26.723-06:00[America/Chicago]
+8d0be2d5	dd23b3fd	sara3224	NIGHT	1	10	1547.00	123.61	1670.61	2019-12-13T20:01:50.025-06:00[America/Chicago]

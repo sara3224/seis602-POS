@@ -2,3 +2,6 @@ id	cashier	shift	level	register	totalAmtBeforeTax	totalTaxAmt	totalAmt	transacti
 50e1c05b	sun04877	DAY	1	2	17136.31	1584.66	18720.97	2019-12-12T20:15:12.187-06:00[America/Chicago]
 e5052aef	stre1002	NIGHT	1	2	1972.79	181.57	2154.36	2019-12-12T20:30:25.406-06:00[America/Chicago]
 b4fb1d6a	sun04877	DAY	1	2	189999.00	17574.91	207573.91	2019-12-12T20:40:34.263-06:00[America/Chicago]
+e7a9d54f	sara3224	DAY	1	1	32.89	3.12	36.01	2019-12-13T15:04:27.205-06:00[America/Chicago]
+ac30d791	sara3224	DAY	1	1	599.89	52.80	652.69	2019-12-13T19:11:25.439-06:00[America/Chicago]
+8d0be2d5	sara3224	NIGHT	1	10	1547.00	123.61	1670.61	2019-12-13T19:59:22.523-06:00[America/Chicago]

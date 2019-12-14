@@ -1,6 +1,4 @@
 id	name	onhands	price	tax	threshold	supplierid	reorderquantity	pending
-21	battery	85	18.20	0.0799	100	12	20	20
-1	lens	30	599.89	0.088	200	3	100	0
 90	charger	79	29.90	0.091	50	3	20	0
 2	sdcard	40	90.99	0.072	50	80	20	0
 7	tripod	9	299.90	0.079	10	1	4	0
@@ -40,3 +38,5 @@ id	name	onhands	price	tax	threshold	supplierid	reorderquantity	pending
 25	console_ps	20	299.93	0.093	30	25	20	0
 56	capsules	198	.69	0.092	500	89	200	0
 55	cup	76	2.99	0.129	80	90	25	0
+1	lens	29	599.89	0.088	200	3	100	100
+21	battery	95	18.20	0.0799	100	12	20	0
