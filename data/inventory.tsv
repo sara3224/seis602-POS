@@ -22,7 +22,7 @@ id	name	onhands	price	tax	threshold	supplierid	reorderquantity	pending
 28	desktops	40	699.89	0.087	20	88	20	0
 29	Macbook	90	1499.99	0.079	90	30	30	0
 30	ipad	45	399.99	0.078	50	22	30	0
-31	ipad	30	399.99	0.079	60	23	20	0
+31	ipod	30	199.99	0.079	60	23	20	0
 32	Tablets	20	198.99	0.069	60	22	16	0
 34	E-readers	20	69.99	0.076	40	12	20	0
 35	printer	30	98.88	0.076	20	38	12	0
