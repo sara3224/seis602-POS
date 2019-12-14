@@ -26,5 +26,4 @@ public class PointOfSaleTest {
 		InventoryRepo.removeItem("foo");
 		InventoryRepo.removeItem("bar");
 	}
-
 }
