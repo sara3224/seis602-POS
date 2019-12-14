@@ -8,7 +8,7 @@ import org.junit.Test;
 public class PointOfSaleTest {
 
 	@Test
-	public void test1() {
+	public void testFullCycle() {
 		PointOfSale pos = new PointOfSale("1001", Shift.DAY, "1");
 
 		InventoryRepo.removeItem("foo");
